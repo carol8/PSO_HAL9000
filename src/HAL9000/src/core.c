@@ -4,6 +4,8 @@
 #include "display.h"
 #include "cpumu.h"
 
+//lab1
+
 #define DEFAULT_SECONDS_TO_IDLE_STATE           60
 
 typedef struct _CORE_DATA
