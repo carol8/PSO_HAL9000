@@ -129,6 +129,10 @@ void
 
     ASSERT(NumberOfParameters == 0);
 
+    DWORD threadCount;
+    GetNumberOfThreads(&threadCount);
+
+    LOG("Thread count: %d\n", threadCount);
     LOG("%7s", "TID|");
     LOG("%20s", "Name|");
     LOG("%5s", "Prio|");

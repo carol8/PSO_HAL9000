@@ -92,6 +92,10 @@ typedef struct _THREAD
     struct _PROCESS*        Process;
 } THREAD, *PTHREAD;
 
+STATUS GetNumberOfThreads(
+    OUT     DWORD* threadCount
+);
+
 //******************************************************************************
 // Function:     ThreadSystemPreinit
 // Description:  Basic global initialization. Initializes the all threads list,
