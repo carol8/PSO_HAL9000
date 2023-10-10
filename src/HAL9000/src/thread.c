@@ -10,7 +10,7 @@
 #include "gdtmu.h"
 #include "pe_exports.h"
 
-#define TID_INCREMENT               4
+#define TID_INCREMENT               0x10
 
 #define THREAD_TIME_SLICE           1
 
@@ -820,7 +820,7 @@ _ThreadInit(
         m_threadSystemData.AllThreadsCount++;
 		LockRelease(&m_threadSystemData.AllThreadsCountLock, oldIntrState);
     
-        LOG("Thread with name %s and TID %d has been created\n", pThread->Name, pThread->Id);
+        LOG("Thread with name %s and TID 0x%x has been created\n", pThread->Name, pThread->Id);
     }
     __finally
     {
@@ -1217,7 +1217,7 @@ _ThreadDestroy(
     m_threadSystemData.AllThreadsCount--;
 	LockRelease(&m_threadSystemData.AllThreadsCountLock, oldState);
 
-    LOG("Thread with name %s and TID %d has been destroyed\n", pThread->Name, pThread->Id);
+    LOG("Thread with name %s and TID 0x%x has been destroyed\n", pThread->Name, pThread->Id);
 
     // This must be done before removing the thread from the process list, else
     // this may be the last thread and the process VAS will be freed by the time
