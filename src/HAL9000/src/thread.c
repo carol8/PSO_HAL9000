@@ -799,6 +799,8 @@ _ThreadInit(
         LockAcquire(&m_threadSystemData.AllThreadsLock, &oldIntrState);
         InsertTailList(&m_threadSystemData.AllThreadsList, &pThread->AllList);
         LockRelease(&m_threadSystemData.AllThreadsLock, oldIntrState);
+    
+        LOG("Thread with name %s and TID %d has been created\n", pThread->Name, pThread->Id);
     }
     __finally
     {
@@ -1190,6 +1192,8 @@ _ThreadDestroy(
     LockAcquire(&m_threadSystemData.AllThreadsLock, &oldState);
     RemoveEntryList(&pThread->AllList);
     LockRelease(&m_threadSystemData.AllThreadsLock, oldState);
+
+    LOG("Thread with name %s and TID %d has been destroyed\n", pThread->Name, pThread->Id);
 
     // This must be done before removing the thread from the process list, else
     // this may be the last thread and the process VAS will be freed by the time
