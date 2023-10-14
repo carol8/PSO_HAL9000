@@ -134,6 +134,7 @@ void
 
     LOG("Thread count: %d\n", threadCount);
     LOG("%7s", "TID|");
+    LOG("%9s", "PTID|");
     LOG("%20s", "Name|");
     LOG("%5s", "Prio|");
     LOG("%8s", "State|");
@@ -690,6 +691,7 @@ STATUS
     pThread = CONTAINING_RECORD(ListEntry, THREAD, AllList );
 
     LOG("%6x%c", pThread->Id, '|');
+    LOG("%8x%c", pThread->ParentTID, '|');
     LOG("%19s%c", pThread->Name, '|');
     LOG("%4U%c", pThread->Priority, '|');
     LOG("%7s%c", _CmdThreadStateToName(pThread->State), '|');

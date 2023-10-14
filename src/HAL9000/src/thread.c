@@ -45,14 +45,6 @@ typedef struct _THREAD_SYSTEM_DATA
 
 static THREAD_SYSTEM_DATA m_threadSystemData;
 
-STATUS GetNumberOfThreads(
-    OUT     DWORD*   threadCount
-    ) 
-{
-    *threadCount = m_threadSystemData.AllThreadsCount;
-    return STATUS_SUCCESS;
-}
-
 __forceinline
 static
 TID
@@ -274,6 +266,14 @@ ThreadSystemInitIdleForCurrentCPU(
     LOG_FUNC_END_THREAD;
 
     return status;
+}
+
+STATUS GetNumberOfThreads(
+	OUT     DWORD* threadCount
+)
+{
+	*threadCount = m_threadSystemData.AllThreadsCount;
+	return STATUS_SUCCESS;
 }
 
 STATUS
@@ -809,6 +809,20 @@ _ThreadInit(
         pThread->Id = _ThreadSystemGetNextTid();
         pThread->State = ThreadStateBlocked;
         pThread->Priority = Priority;
+
+        if (pThread->Id != 0) {
+			PTHREAD parentThread = GetCurrentThread();
+            if (parentThread != NULL) {
+                pThread->ParentTID = parentThread->Id;
+            }
+            else {
+                pThread->ParentTID = 1;
+            }
+        }
+        else {
+            pThread->ParentTID = 0xffffffff;
+        }
+
 
         LockInit(&pThread->BlockLock);
 
