@@ -475,7 +475,7 @@ ThreadTick(
     if (++pCpu->ThreadData.RunningThreadTicks >= THREAD_TIME_SLICE)
     {
         LOG_TRACE_THREAD("Will yield on return\n");
-        pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+        //pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
     }
 }
 
@@ -498,8 +498,8 @@ ThreadYield(
 
     ASSERT( NULL != pCpu );
 
-    bForcedYield = pCpu->ThreadData.YieldOnInterruptReturn;
-    pCpu->ThreadData.YieldOnInterruptReturn = FALSE;
+    bForcedYield = TRUE;
+    //pCpu->ThreadData.YieldOnInterruptReturn = FALSE;
 
     if (THREAD_FLAG_FORCE_TERMINATE_PENDING == _InterlockedAnd(&pThread->Flags, MAX_DWORD))
     {
@@ -613,7 +613,8 @@ ThreadYieldOnInterrupt(
     void
     )
 {
-    return GetCurrentPcpu()->ThreadData.YieldOnInterruptReturn;
+    //return GetCurrentPcpu()->ThreadData.YieldOnInterruptReturn;
+    return FALSE;
 }
 
 void
