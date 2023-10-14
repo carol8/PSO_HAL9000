@@ -1204,9 +1204,6 @@ _ThreadGetReadyThread(
     pNextThread = NULL;
 
     pEntry = RemoveHeadList(&m_threadSystemData.ReadyThreadsList);
-	LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
-	m_threadSystemData.ReadyThreadsCount--;
-	LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
     if (pEntry == &m_threadSystemData.ReadyThreadsList)
     {
         pNextThread = GetCurrentPcpu()->ThreadData.IdleThread;
@@ -1215,7 +1212,9 @@ _ThreadGetReadyThread(
     else
     {
         pNextThread = CONTAINING_RECORD( pEntry, THREAD, ReadyList );
-
+		LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+		m_threadSystemData.ReadyThreadsCount--;
+		LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
         ASSERT( pNextThread->State == ThreadStateReady );
         bIdleScheduled = FALSE;
     }
