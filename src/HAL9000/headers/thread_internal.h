@@ -98,6 +98,10 @@ STATUS GetNumberOfThreads(
     OUT     DWORD* threadCount
 );
 
+STATUS GetNumberOfReadyThreads(
+	OUT     DWORD* threadCount
+);
+
 //******************************************************************************
 // Function:     ThreadSystemPreinit
 // Description:  Basic global initialization. Initializes the all threads list,
@@ -257,6 +261,20 @@ ThreadExecuteForEachThreadEntry(
     IN      PFUNC_ListFunction  Function,
     IN_OPT  PVOID               Context
     );
+
+//******************************************************************************
+// Function:     ThreadExecuteForEachReadyThreadEntry
+// Description:  Iterates over the ready threads list and invokes Function on 
+//               each entry passing an additional optional Context parameter.
+// Returns:      STATUS
+// Parameter:    IN PFUNC_ListFunction Function
+// Parameter:    IN_OPT PVOID Context
+//******************************************************************************
+STATUS
+ThreadExecuteForEachReadyThreadEntry(
+	IN      PFUNC_ListFunction  Function,
+	IN_OPT  PVOID               Context
+);
 
 
 //******************************************************************************O

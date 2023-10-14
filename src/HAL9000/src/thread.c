@@ -40,7 +40,12 @@ typedef struct _THREAD_SYSTEM_DATA
     LOCK                AllThreadsCountLock;
 
 	_Guarded_by_(AllThreadsCountLock)
-	DWORD               AllThreadsCount;
+    DWORD               AllThreadsCount;
+
+	LOCK                ReadyThreadsCountLock;
+
+	_Guarded_by_(ReadyThreadsCountLock)
+	DWORD               ReadyThreadsCount;
 } THREAD_SYSTEM_DATA, *PTHREAD_SYSTEM_DATA;
 
 static THREAD_SYSTEM_DATA m_threadSystemData;
@@ -153,6 +158,9 @@ ThreadSystemPreinit(
 
     m_threadSystemData.AllThreadsCount = 0;
     LockInit(&m_threadSystemData.AllThreadsCountLock);
+
+    m_threadSystemData.ReadyThreadsCount = 0;
+    LockInit(&m_threadSystemData.ReadyThreadsCountLock);
 }
 
 STATUS
@@ -273,6 +281,14 @@ STATUS GetNumberOfThreads(
 )
 {
 	*threadCount = m_threadSystemData.AllThreadsCount;
+	return STATUS_SUCCESS;
+}
+
+STATUS GetNumberOfReadyThreads(
+	OUT     DWORD* threadCount
+)
+{
+	*threadCount = m_threadSystemData.ReadyThreadsCount;
 	return STATUS_SUCCESS;
 }
 
@@ -495,6 +511,9 @@ ThreadYield(
     if (pThread != pCpu->ThreadData.IdleThread)
     {
         InsertTailList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList);
+		LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+		m_threadSystemData.ReadyThreadsCount++;
+		LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
     }
     if (!bForcedYield)
     {
@@ -553,6 +572,10 @@ ThreadUnblock(
     Thread->State = ThreadStateReady;
     LockRelease(&m_threadSystemData.ReadyThreadsLock, dummyState );
     LockRelease(&Thread->BlockLock, oldState);
+
+	LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+	m_threadSystemData.ReadyThreadsCount++;
+	LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
 }
 
 void
@@ -704,6 +727,33 @@ ThreadExecuteForEachThreadEntry(
     LockRelease(&m_threadSystemData.AllThreadsLock, oldState );
 
     return status;
+}
+
+STATUS
+ThreadExecuteForEachReadyThreadEntry(
+	IN      PFUNC_ListFunction  Function,
+	IN_OPT  PVOID               Context
+)
+{
+	STATUS status;
+	INTR_STATE oldState;
+
+	if (NULL == Function)
+	{
+		return STATUS_INVALID_PARAMETER1;
+	}
+
+	status = STATUS_SUCCESS;
+
+	LockAcquire(&m_threadSystemData.ReadyThreadsLock, &oldState);
+	status = ForEachElementExecute(&m_threadSystemData.ReadyThreadsList,
+		Function,
+		Context,
+		FALSE
+	);
+	LockRelease(&m_threadSystemData.ReadyThreadsLock, oldState);
+
+	return status;
 }
 
 void
@@ -1142,10 +1192,11 @@ PTHREAD
 _ThreadGetReadyThread(
     void
     )
-{
+{  
     PTHREAD pNextThread;
     PLIST_ENTRY pEntry;
     BOOLEAN bIdleScheduled;
+    INTR_STATE dummyState;
 
     ASSERT( INTR_OFF == CpuIntrGetState());
     ASSERT( LockIsOwner(&m_threadSystemData.ReadyThreadsLock));
@@ -1153,6 +1204,9 @@ _ThreadGetReadyThread(
     pNextThread = NULL;
 
     pEntry = RemoveHeadList(&m_threadSystemData.ReadyThreadsList);
+	LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+	m_threadSystemData.ReadyThreadsCount--;
+	LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
     if (pEntry == &m_threadSystemData.ReadyThreadsList)
     {
         pNextThread = GetCurrentPcpu()->ThreadData.IdleThread;
