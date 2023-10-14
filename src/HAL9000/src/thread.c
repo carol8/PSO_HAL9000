@@ -12,7 +12,7 @@
 
 #define TID_INCREMENT               0x10
 
-#define THREAD_TIME_SLICE           1
+#define THREAD_TIME_SLICE           4
 
 extern void ThreadStart();
 
