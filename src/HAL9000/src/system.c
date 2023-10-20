@@ -70,7 +70,7 @@ SystemInit(
     status = STATUS_SUCCESS;
     pCpu = NULL;
 
-    LogSystemInit(LogLevelInfo,
+    LogSystemInit(LogLevelError,
                   LogComponentInterrupt | LogComponentIo | LogComponentAcpi | LogComponentCpu,
                   TRUE
                   );
@@ -312,6 +312,9 @@ SystemInit(
     }
 
     LOGL("Network stack successfully initialized\n");
+
+    LogSetLevel(LogLevelTrace);
+    LogSetTracedComponents(LogComponentThread);
 
     return status;
 }
