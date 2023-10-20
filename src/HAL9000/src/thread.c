@@ -173,7 +173,7 @@ ThreadSystemInitMainForCurrentCPU(
     if (!SUCCEEDED(status))
     {
         LOG_FUNC_ERROR("_ThreadInit", status );
-        return status;
+        status = _ThreadInit(mainThreadName, ThreadPriorityDefault, NULL, FALSE);
     }
     LOGPL("_ThreadInit succeeded\n");
 
