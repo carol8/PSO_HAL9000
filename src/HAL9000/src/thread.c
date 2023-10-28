@@ -700,7 +700,7 @@ ThreadComparePriorityReadyList(
     PTHREAD pTh2 = CONTAINING_RECORD(e2, THREAD, ReadyList);
 	THREAD_PRIORITY prio1 = ThreadGetPriority(pTh1);
 	THREAD_PRIORITY prio2 = ThreadGetPriority(pTh2);
-    compare_and_return_result(prio1, prio2);
+    return compare_and_return_result(prio1, prio2);
 }
 
 STATUS
