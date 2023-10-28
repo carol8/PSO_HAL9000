@@ -9,6 +9,7 @@
 #include "isr.h"
 #include "gdtmu.h"
 #include "pe_exports.h"
+#include "smp.h"
 
 #define TID_INCREMENT               4
 
@@ -478,7 +479,7 @@ ThreadYield(
     LockAcquire(&m_threadSystemData.ReadyThreadsLock, &dummyState);
     if (pThread != pCpu->ThreadData.IdleThread)
     {
-        InsertTailList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList);
+        InsertOrderedList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList, &ThreadComparePriorityReadyList, NULL);
     }
     if (!bForcedYield)
     {
@@ -518,6 +519,12 @@ ThreadBlock(
     ASSERT( !LockIsOwner(&m_threadSystemData.ReadyThreadsLock));
 }
 
+void ThreadYieldForIpi()
+{
+    PPCPU pCpu = GetCurrentPcpu();
+    pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+}
+
 void
 ThreadUnblock(
     IN      PTHREAD              Thread
@@ -533,10 +540,14 @@ ThreadUnblock(
     ASSERT(ThreadStateBlocked == Thread->State);
 
     LockAcquire(&m_threadSystemData.ReadyThreadsLock, &dummyState);
-    InsertTailList(&m_threadSystemData.ReadyThreadsList, &Thread->ReadyList);
+    InsertOrderedList(&m_threadSystemData.ReadyThreadsList, &Thread->ReadyList, &ThreadComparePriorityReadyList, NULL);
     Thread->State = ThreadStateReady;
     LockRelease(&m_threadSystemData.ReadyThreadsLock, dummyState );
     LockRelease(&Thread->BlockLock, oldState);
+
+	SMP_DESTINATION dest = { 0 };
+	SmpSendGenericIpiEx(ThreadYieldForIpi, NULL, NULL, NULL,
+		FALSE, SmpIpiSendToAllIncludingSelf, dest);
 }
 
 void
@@ -660,7 +671,36 @@ ThreadSetPriority(
 {
     ASSERT(ThreadPriorityLowest <= NewPriority && NewPriority <= ThreadPriorityMaximum);
 
+    THREAD_PRIORITY oldPriority = ThreadGetPriority(GetCurrentThread());
+
     GetCurrentThread()->Priority = NewPriority;
+
+    if(NewPriority < oldPriority)
+        ThreadYield();
+}
+
+DWORD
+compare_and_return_result(DWORD p1, DWORD p2)
+{
+    if (p1 < p2)
+        return 1;
+    if (p1 == p2)
+        return 0;
+    return -1;
+}
+
+DWORD
+ThreadComparePriorityReadyList(
+	IN      PLIST_ENTRY         e1,
+	IN      PLIST_ENTRY         e2,
+	IN_OPT  PVOID               Context
+)
+{
+    PTHREAD pTh1 = CONTAINING_RECORD(e1, THREAD, ReadyList);
+    PTHREAD pTh2 = CONTAINING_RECORD(e2, THREAD, ReadyList);
+	THREAD_PRIORITY prio1 = ThreadGetPriority(pTh1);
+	THREAD_PRIORITY prio2 = ThreadGetPriority(pTh2);
+    compare_and_return_result(prio1, prio2);
 }
 
 STATUS
