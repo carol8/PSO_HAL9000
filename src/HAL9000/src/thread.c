@@ -519,10 +519,15 @@ ThreadBlock(
     ASSERT( !LockIsOwner(&m_threadSystemData.ReadyThreadsLock));
 }
 
-void ThreadYieldForIpi()
+STATUS
+ThreadYieldForIpi(
+    IN_OPT  PVOID               Context
+    )
 {
+    UNREFERENCED_PARAMETER(Context);
     PPCPU pCpu = GetCurrentPcpu();
     pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+    return STATUS_SUCCESS;
 }
 
 void
@@ -546,7 +551,7 @@ ThreadUnblock(
     LockRelease(&Thread->BlockLock, oldState);
 
 	SMP_DESTINATION dest = { 0 };
-	SmpSendGenericIpiEx(ThreadYieldForIpi, NULL, NULL, NULL,
+	SmpSendGenericIpiEx(&ThreadYieldForIpi, NULL, NULL, NULL,
 		FALSE, SmpIpiSendToAllIncludingSelf, dest);
 }
 
@@ -679,7 +684,7 @@ ThreadSetPriority(
         ThreadYield();
 }
 
-DWORD
+INT64
 compare_and_return_result(DWORD p1, DWORD p2)
 {
     if (p1 < p2)
@@ -689,13 +694,14 @@ compare_and_return_result(DWORD p1, DWORD p2)
     return -1;
 }
 
-DWORD
+INT64
 ThreadComparePriorityReadyList(
 	IN      PLIST_ENTRY         e1,
 	IN      PLIST_ENTRY         e2,
 	IN_OPT  PVOID               Context
 )
 {
+    UNREFERENCED_PARAMETER(Context);
     PTHREAD pTh1 = CONTAINING_RECORD(e1, THREAD, ReadyList);
     PTHREAD pTh2 = CONTAINING_RECORD(e2, THREAD, ReadyList);
 	THREAD_PRIORITY prio1 = ThreadGetPriority(pTh1);

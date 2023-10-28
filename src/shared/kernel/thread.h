@@ -128,7 +128,7 @@ ThreadGetPriority(
 // Parameter:    IN PLIST_ENTRY e2
 // Parameter:    IN_OPT PVOID Context
 //******************************************************************************
-DWORD
+INT64
 ThreadComparePriorityReadyList(
     IN      PLIST_ENTRY         e1,
     IN      PLIST_ENTRY         e2,
