@@ -9,6 +9,7 @@
 #include "isr.h"
 #include "gdtmu.h"
 #include "pe_exports.h"
+#include "smp.h"
 
 #define TID_INCREMENT               4
 
@@ -458,6 +459,10 @@ ThreadYield(
     PPCPU pCpu;
     BOOLEAN bForcedYield;
 
+    //if (pThread->Id >= 156 && pThread->Id <= 232 && pThread->UninterruptedTicks < 3)
+        //LOG("Thread with Tid = %d is yielding the CPU with %d uninterrupted ticks.\n", pThread->Id, pThread->UninterruptedTicks);
+
+
     ASSERT( NULL != pThread);
 
     oldState = CpuIntrDisable();
@@ -478,7 +483,7 @@ ThreadYield(
     LockAcquire(&m_threadSystemData.ReadyThreadsLock, &dummyState);
     if (pThread != pCpu->ThreadData.IdleThread)
     {
-        InsertTailList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList);
+        InsertOrderedList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList, &ThreadComparePriorityReadyList, NULL);
     }
     if (!bForcedYield)
     {
@@ -518,6 +523,17 @@ ThreadBlock(
     ASSERT( !LockIsOwner(&m_threadSystemData.ReadyThreadsLock));
 }
 
+STATUS
+ThreadYieldForIpi(
+    IN_OPT  PVOID               Context
+    )
+{
+    UNREFERENCED_PARAMETER(Context);
+    PPCPU pCpu = GetCurrentPcpu();
+    pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+    return STATUS_SUCCESS;
+}
+
 void
 ThreadUnblock(
     IN      PTHREAD              Thread
@@ -533,10 +549,14 @@ ThreadUnblock(
     ASSERT(ThreadStateBlocked == Thread->State);
 
     LockAcquire(&m_threadSystemData.ReadyThreadsLock, &dummyState);
-    InsertTailList(&m_threadSystemData.ReadyThreadsList, &Thread->ReadyList);
+    InsertOrderedList(&m_threadSystemData.ReadyThreadsList, &Thread->ReadyList, &ThreadComparePriorityReadyList, NULL);
     Thread->State = ThreadStateReady;
     LockRelease(&m_threadSystemData.ReadyThreadsLock, dummyState );
     LockRelease(&Thread->BlockLock, oldState);
+
+	SMP_DESTINATION dest = { 0 };
+	SmpSendGenericIpiEx(&ThreadYieldForIpi, NULL, NULL, NULL,
+		FALSE, SmpIpiSendToAllIncludingSelf, dest);
 }
 
 void
@@ -660,7 +680,48 @@ ThreadSetPriority(
 {
     ASSERT(ThreadPriorityLowest <= NewPriority && NewPriority <= ThreadPriorityMaximum);
 
+    THREAD_PRIORITY oldPriority = ThreadGetPriority(GetCurrentThread());
+
     GetCurrentThread()->Priority = NewPriority;
+
+    if(NewPriority < oldPriority)
+    {
+        INTR_STATE oldState;
+
+        LockAcquire(&m_threadSystemData.ReadyThreadsLock, &oldState);
+
+        PTHREAD headReady = CONTAINING_RECORD(&(m_threadSystemData.ReadyThreadsList.Flink), THREAD, ReadyList);
+
+        LockRelease(&m_threadSystemData.ReadyThreadsLock, oldState);
+
+        if(headReady->Priority > NewPriority)
+            ThreadYield();
+    }
+}
+
+INT64
+compare_and_return_result(THREAD_PRIORITY p1, THREAD_PRIORITY p2)
+{
+    if (p1 < p2)
+        return 1;
+    if (p1 > p2)
+        return -1;
+    return 0;
+}
+
+INT64
+ThreadComparePriorityReadyList(
+	IN      PLIST_ENTRY         e1,
+	IN      PLIST_ENTRY         e2,
+	IN_OPT  PVOID               Context
+)
+{
+    UNREFERENCED_PARAMETER(Context);
+    PTHREAD pTh1 = CONTAINING_RECORD(e1, THREAD, ReadyList);
+    PTHREAD pTh2 = CONTAINING_RECORD(e2, THREAD, ReadyList);
+	THREAD_PRIORITY prio1 = ThreadGetPriority(pTh1);
+	THREAD_PRIORITY prio2 = ThreadGetPriority(pTh2);
+    return compare_and_return_result(prio1, prio2);
 }
 
 STATUS
@@ -799,6 +860,8 @@ _ThreadInit(
         LockAcquire(&m_threadSystemData.AllThreadsLock, &oldIntrState);
         InsertTailList(&m_threadSystemData.AllThreadsList, &pThread->AllList);
         LockRelease(&m_threadSystemData.AllThreadsLock, oldIntrState);
+
+        //LOG("Thread with TID=%d and priority=%d is created\n", pThread->Id, pThread->Priority);
     }
     __finally
     {
@@ -1023,6 +1086,10 @@ _ThreadSchedule(
     {
         pCurrentThread->UninterruptedTicks++;
     }
+    //PTHREAD pThread = GetCurrentThread();
+    //if (pThread->Id >= 156 && pThread->Id <= 232 && pThread->UninterruptedTicks < 3)
+	    //LOG("Thread with Tid = %d got the CPU and has %d uninterrupted ticks.\n", pThread->Id, pThread->UninterruptedTicks);
+
 
     ThreadCleanupPostSchedule();
 }

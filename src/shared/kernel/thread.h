@@ -119,3 +119,18 @@ THREAD_PRIORITY
 ThreadGetPriority(
     IN_OPT  PTHREAD             Thread
     );
+
+//******************************************************************************
+// Function:     ThreadComparePriorityReadyList
+// Description:  Returns a negative number if e1 has a higher priority than e2. Otherwise returns a positive number.
+// Returns:      DWORD
+// Parameter:    IN PLIST_ENTRY e1
+// Parameter:    IN PLIST_ENTRY e2
+// Parameter:    IN_OPT PVOID Context
+//******************************************************************************
+INT64
+ThreadComparePriorityReadyList(
+    IN      PLIST_ENTRY         e1,
+    IN      PLIST_ENTRY         e2,
+    IN_OPT  PVOID               Context
+    );
