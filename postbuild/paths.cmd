@@ -12,7 +12,7 @@ set PATH_TO_VM_DISK=__EMPTY__
 set PATH_TO_VM_TOOLS=__EMPTY__
 set VOL_MOUNT_LETTER=__EMPTY__
 
-if _%COMPUTERNAME%_==_DESKTOP-97EJJK2_ goto config_DESKTOP-97EJJK2
+if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
 if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
 if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
 if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
@@ -70,14 +70,14 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
 
 goto end
 
-:config_DESKTOP-97EJJK2
+:config_DESKTOP-NITRO5
 
-SET PATH_TO_VIX_TOOLS="C:\Program Files (x86)\VMware\VMware Workstation"
-SET PATH_TO_LOG_FILE="C:\Users\Ruben\Desktop\PSO\HAL9000folder\HAL9000\VM\HAL9000_VM\HAL9000.log"
-SET PATH_TO_VM_DISK="C:\Users\Ruben\Desktop\PSO\HAL9000folder\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
 SET VOL_MOUNT_LETTER="Q:"
-SET PXE_PATH="C:\Users\Ruben\Desktop\PSO\HAL9000folder\HAL9000\PXE"
-SET PATH_TO_VM_FILE="C:\Users\Ruben\Desktop\PSO\HAL9000folder\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+SET PATH_TO_VIX_TOOLS="F:\Programe\VMWare"
 goto end
 
 :end
