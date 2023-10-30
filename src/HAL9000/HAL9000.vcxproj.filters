@@ -704,6 +704,9 @@
     <ClInclude Include="headers\test_process.h">
       <Filter>Header Files\debug\test\userprog</Filter>
     </ClInclude>
+    <ClInclude Include="headers\semaphore.h">
+      <Filter>Header Files\executive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\defines.yasm">

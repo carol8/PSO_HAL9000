@@ -344,6 +344,7 @@
     <ClInclude Include="headers\os_info.h" />
     <ClInclude Include="headers\print.h" />
     <ClInclude Include="headers\scan_codes.h" />
+    <ClInclude Include="headers\semaphore.h" />
     <ClInclude Include="headers\serial_comm.h" />
     <ClInclude Include="headers\smp.h" />
     <ClInclude Include="headers\synch.h" />
