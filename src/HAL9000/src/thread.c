@@ -459,6 +459,10 @@ ThreadYield(
     PPCPU pCpu;
     BOOLEAN bForcedYield;
 
+    //if (pThread->Id >= 156 && pThread->Id <= 232 && pThread->UninterruptedTicks < 3)
+        //LOG("Thread with Tid = %d is yielding the CPU with %d uninterrupted ticks.\n", pThread->Id, pThread->UninterruptedTicks);
+
+
     ASSERT( NULL != pThread);
 
     oldState = CpuIntrDisable();
@@ -681,17 +685,28 @@ ThreadSetPriority(
     GetCurrentThread()->Priority = NewPriority;
 
     if(NewPriority < oldPriority)
-        ThreadYield();
+    {
+        INTR_STATE oldState;
+
+        LockAcquire(&m_threadSystemData.ReadyThreadsLock, &oldState);
+
+        PTHREAD headReady = CONTAINING_RECORD(&(m_threadSystemData.ReadyThreadsList.Flink), THREAD, ReadyList);
+
+        LockRelease(&m_threadSystemData.ReadyThreadsLock, oldState);
+
+        if(headReady->Priority > NewPriority)
+            ThreadYield();
+    }
 }
 
 INT64
-compare_and_return_result(DWORD p1, DWORD p2)
+compare_and_return_result(THREAD_PRIORITY p1, THREAD_PRIORITY p2)
 {
     if (p1 < p2)
         return 1;
-    if (p1 == p2)
-        return 0;
-    return -1;
+    if (p1 > p2)
+        return -1;
+    return 0;
 }
 
 INT64
@@ -845,6 +860,8 @@ _ThreadInit(
         LockAcquire(&m_threadSystemData.AllThreadsLock, &oldIntrState);
         InsertTailList(&m_threadSystemData.AllThreadsList, &pThread->AllList);
         LockRelease(&m_threadSystemData.AllThreadsLock, oldIntrState);
+
+        //LOG("Thread with TID=%d and priority=%d is created\n", pThread->Id, pThread->Priority);
     }
     __finally
     {
@@ -1069,6 +1086,10 @@ _ThreadSchedule(
     {
         pCurrentThread->UninterruptedTicks++;
     }
+    //PTHREAD pThread = GetCurrentThread();
+    //if (pThread->Id >= 156 && pThread->Id <= 232 && pThread->UninterruptedTicks < 3)
+	    //LOG("Thread with Tid = %d got the CPU and has %d uninterrupted ticks.\n", pThread->Id, pThread->UninterruptedTicks);
+
 
     ThreadCleanupPostSchedule();
 }
