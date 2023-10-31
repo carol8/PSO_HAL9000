@@ -325,8 +325,8 @@ SystemInit(
 
     LOGL("Network stack successfully initialized\n");
     
-    SMP_DESTINATION dest = { 0 };
-    status = SmpSendGenericIpiEx(_HelloIpi, NULL, NULL, NULL, FALSE, SmpIpiSendToAllIncludingSelf, dest);
+    SMP_DESTINATION dest = { 6 };
+    status = SmpSendGenericIpiEx(_HelloIpi, NULL, NULL, NULL, FALSE, SmpIpiSendToCpu, dest);
 	if (!SUCCEEDED(status))
 	{
 		LOG_FUNC_ERROR("SmpSendGenericIpi", status);
