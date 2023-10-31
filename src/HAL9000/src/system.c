@@ -21,6 +21,7 @@
 #include "ex_system.h"
 #include "process_internal.h"
 #include "boot_module.h"
+#include "rtc.h"
 
 #define NO_OF_TSS_STACKS             7
 STATIC_ASSERT(NO_OF_TSS_STACKS <= NO_OF_IST);
@@ -31,6 +32,12 @@ typedef struct _SYSTEM_DATA
 } SYSTEM_DATA, *PSYSTEM_DATA;
 
 static SYSTEM_DATA m_systemData;
+
+typedef struct _CPU_DATA 
+{
+    QWORD tickCount;
+    BYTE callingCpuId;
+} CPU_DATA, *PCPU_DATA;
 
 QWORD gVirtualToPhysicalOffset;
 
@@ -61,13 +68,40 @@ SystemPreinit(
 
 static
 STATUS
-(__cdecl _HelloIpi)(
+(__cdecl _PrintTick)(
 	IN_OPT PVOID Context
 	)
 {
-	UNREFERENCED_PARAMETER(Context);
+	PCPU_DATA pcpu_data = (PCPU_DATA)Context;
 
-	LOGP("Hello\n");
+	LOGP("%U\n", pcpu_data->tickCount);
+
+	return STATUS_SUCCESS;
+}
+
+static
+STATUS
+(__cdecl _PrintTickAndIPI)(
+	IN_OPT PVOID Context
+	)
+{
+    STATUS status;
+
+    PCPU_DATA pcpu_data = (PCPU_DATA)Context;
+
+    LOGP("%U\n", pcpu_data->tickCount);
+
+	SMP_DESTINATION dest = { pcpu_data->callingCpuId };
+	CPU_DATA cpu_data;
+	cpu_data.tickCount = RtcGetTickCount();
+	cpu_data.callingCpuId = CpuGetApicId();
+	status = SmpSendGenericIpiEx(_PrintTick, (PVOID)&cpu_data, NULL, NULL, TRUE, SmpIpiSendToAllExcludingSelf, dest);
+	if (!SUCCEEDED(status))
+	{
+		LOG_FUNC_ERROR("SmpSendGenericIpi", status);
+		return status;
+	}
+
 	return STATUS_SUCCESS;
 }
 
@@ -325,8 +359,11 @@ SystemInit(
 
     LOGL("Network stack successfully initialized\n");
     
-    SMP_DESTINATION dest = { 6 };
-    status = SmpSendGenericIpiEx(_HelloIpi, NULL, NULL, NULL, FALSE, SmpIpiSendToCpu, dest);
+    SMP_DESTINATION dest = { 0 };
+    CPU_DATA cpu_data;
+    cpu_data.tickCount = RtcGetTickCount();
+    cpu_data.callingCpuId = CpuGetApicId();
+    status = SmpSendGenericIpiEx(_PrintTickAndIPI, (PVOID) &cpu_data, NULL, NULL, TRUE, SmpIpiSendToAllExcludingSelf, dest);
 	if (!SUCCEEDED(status))
 	{
 		LOG_FUNC_ERROR("SmpSendGenericIpi", status);
