@@ -1,0 +1,7 @@
+1. a. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de intrare (tastatura)
+   b. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de iesire (ecranul)
+   c. Acest thread e CPU bound pentru ca proceseaza date, nu asteapta dupa dispozitive IO.
+   d. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de intrare (HDD-ul)
+2. Thread-urile IO bound, pentru ca vor avea prioritate mai mare (pentru a rula imediat dupa deblocarea
+dispozitivului IO
+3. Thread-urile CPU bound, deoarece ele au nevoie de cat mai mult timp pentru a procesa datele.
