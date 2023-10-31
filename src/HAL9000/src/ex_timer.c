@@ -63,7 +63,7 @@ ExTimerCheck(
     }
 
     PEX_TIMER Timer = CONTAINING_RECORD(TimerListEntry, EX_TIMER, TimerListElem);
-    if (IomuGetSystemTimeUs() >= Timer->TriggerTimeUs) {
+    if (Timer->TimerStarted && IomuGetSystemTimeUs() >= Timer->TriggerTimeUs) {
         ExEventSignal(&Timer->TimerEvent);
         return STATUS_SUCCESS;
     }
