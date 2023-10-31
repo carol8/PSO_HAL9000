@@ -3,5 +3,9 @@
    c. Acest thread e CPU bound pentru ca proceseaza date, nu asteapta dupa dispozitive IO.
    d. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de intrare (HDD-ul)
 2. Thread-urile IO bound, pentru ca vor avea prioritate mai mare (pentru a rula imediat dupa deblocarea
-dispozitivului IO
+dispozitivului IO.
 3. Thread-urile CPU bound, deoarece ele au nevoie de cat mai mult timp pentru a procesa datele.
+4. TickCountCompleted reprezinta numarul de tick-uri de procesor rulate de fiecare thread. Variabila se
+incrementeaza in ThreadTick().
+   TickCountEarly reprezinta numarul de tick-uri de procesor care s-au terminat mai devreme decat cuanta
+de timp alocata pentru acel thread (prin yield voluntar sau blocare)
