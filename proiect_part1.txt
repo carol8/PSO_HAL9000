@@ -668,6 +668,1161 @@ index a46a2ba..cec924b 100644
 -
  :end
 \ No newline at end of file
+diff --git a/proiect_part1.txt b/proiect_part1.txt
+deleted file mode 100644
+index 1c86375..0000000
+--- a/proiect_part1.txt
++++ /dev/null
+@@ -1,1149 +0,0 @@
+-diff --git a/.vs/HAL9000/v17/.wsuo b/.vs/HAL9000/v17/.wsuo
+-deleted file mode 100644
+-index ae860c1..0000000
+-Binary files a/.vs/HAL9000/v17/.wsuo and /dev/null differ
+-diff --git a/.vs/VSWorkspaceState.json b/.vs/VSWorkspaceState.json
+-deleted file mode 100644
+-index 6b61141..0000000
+---- a/.vs/VSWorkspaceState.json
+-+++ /dev/null
+-@@ -1,6 +0,0 @@
+--{
+--  "ExpandedNodes": [
+--    ""
+--  ],
+--  "PreviewInSolutionExplorer": false
+--}
+-\ No newline at end of file
+-diff --git a/.vs/slnx.sqlite b/.vs/slnx.sqlite
+-deleted file mode 100644
+-index e8b8c05..0000000
+-Binary files a/.vs/slnx.sqlite and /dev/null differ
+-diff --git a/PXE/Tests.module b/PXE/Tests.module
+-index 3ad016f..e69de29 100644
+---- a/PXE/Tests.module
+-+++ b/PXE/Tests.module
+-@@ -1,25 +0,0 @@
+--/log ON
+--/loglevel 0
+--/logcomp 8000
+--/run testthreadprioritydonationchain 16
+--/run testthreadprioritydonationlower 16
+--/run testthreadprioritydonationmulti 16
+--/run testthreadprioritydonationmultiinverted 16
+--/run testthreadprioritydonationmultithreads 16
+--/run testthreadprioritydonationmultithreadsinverted 16
+--/run testthreadprioritydonationnest 16
+--/run testthreadprioritydonationonce 16
+--/run testthreadprioritymutex 16
+--/run testthreadpriorityroundrobin 16
+--/run testthreadprioritywakeup 16
+--/run testthreadpriorityyield 16
+--/run testthreadtimerabsolute 16
+--/run testthreadtimerabsolutepassed 16
+--/run testthreadtimermultiplethreads 16
+--/run testthreadtimermultipletimers 16
+--/run testthreadtimerperiodicmultiple 16
+--/run testthreadtimerperiodiconce 16
+--/run testthreadtimerperiodiczero 16
+--/run testthreadtimerrelative 16
+--/run testthreadtimerrelativezero 16
+--/shutdown
+-diff --git a/lab3.txt b/lab3.txt
+-deleted file mode 100644
+-index fe5d8ec..0000000
+---- a/lab3.txt
+-+++ /dev/null
+-@@ -1,585 +0,0 @@
+--diff --git a/lab2.txt b/lab2.txt
+--deleted file mode 100644
+--index 816295b..0000000
+----- a/lab2.txt
+--+++ /dev/null
+--@@ -1,456 +0,0 @@
+---diff --git a/PXE/Tests.module b/PXE/Tests.module
+---index 5c2a88a..e69de29 100644
+------ a/PXE/Tests.module
+---+++ b/PXE/Tests.module
+---@@ -1 +0,0 @@
+----/threads
+---diff --git a/postbuild/paths.cmd b/postbuild/paths.cmd
+---index 2e54d6e..cec924b 100644
+------ a/postbuild/paths.cmd
+---+++ b/postbuild/paths.cmd
+---@@ -12,7 +12,6 @@ set PATH_TO_VM_DISK=__EMPTY__
+--- set PATH_TO_VM_TOOLS=__EMPTY__
+--- set VOL_MOUNT_LETTER=__EMPTY__
+--- 
+----if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
+--- if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
+--- if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
+--- if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
+---@@ -70,14 +69,4 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
+--- 
+--- goto end
+--- 
+----:config_DESKTOP-NITRO5
+----
+----SET VOL_MOUNT_LETTER="Q:"
+----SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+----SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+----SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+----SET PATH_TO_VIX_TOOLS="F:\Programe\VMWare"
+----SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+----goto end
+----
+--- :end
+---\ No newline at end of file
+---diff --git a/src/HAL9000/headers/cmd_thread_helper.h b/src/HAL9000/headers/cmd_thread_helper.h
+---index f58af9b..c2c9f13 100644
+------ a/src/HAL9000/headers/cmd_thread_helper.h
+---+++ b/src/HAL9000/headers/cmd_thread_helper.h
+---@@ -4,7 +4,6 @@
+--- 
+--- FUNC_GenericCommand CmdListCpus;
+--- FUNC_GenericCommand CmdListThreads;
+----FUNC_GenericCommand CmdListReadyThreads;
+--- FUNC_GenericCommand CmdYield;
+--- FUNC_GenericCommand CmdRunTest;
+--- FUNC_GenericCommand CmdSendIpi;
+---diff --git a/src/HAL9000/headers/cpumu.h b/src/HAL9000/headers/cpumu.h
+---index f15632d..e1f610c 100644
+------ a/src/HAL9000/headers/cpumu.h
+---+++ b/src/HAL9000/headers/cpumu.h
+---@@ -17,6 +17,8 @@ typedef struct _THREADING_DATA
+---     struct _THREAD*     CurrentThread;
+---     struct _THREAD*     PreviousThread;
+--- 
+---+    BOOLEAN             YieldOnInterruptReturn;
+---+
+---     QWORD               IdleTicks;
+---     QWORD               KernelTicks;
+--- } THREADING_DATA, *PTHREADING_DATA;
+---diff --git a/src/HAL9000/headers/thread_internal.h b/src/HAL9000/headers/thread_internal.h
+---index 07f5f8e..be2588a 100644
+------ a/src/HAL9000/headers/thread_internal.h
+---+++ b/src/HAL9000/headers/thread_internal.h
+---@@ -89,19 +89,9 @@ typedef struct _THREAD
+---     // MUST be non-NULL for all threads which belong to user-mode processes
+---     PVOID                   UserStack;
+--- 
+----    TID                     ParentTID;
+----
+---     struct _PROCESS*        Process;
+--- } THREAD, *PTHREAD;
+--- 
+----STATUS GetNumberOfThreads(
+----    OUT     DWORD* threadCount
+----);
+----
+----STATUS GetNumberOfReadyThreads(
+----	OUT     DWORD* threadCount
+----);
+----
+--- //******************************************************************************
+--- // Function:     ThreadSystemPreinit
+--- // Description:  Basic global initialization. Initializes the all threads list,
+---@@ -262,20 +252,6 @@ ThreadExecuteForEachThreadEntry(
+---     IN_OPT  PVOID               Context
+---     );
+--- 
+----//******************************************************************************
+----// Function:     ThreadExecuteForEachReadyThreadEntry
+----// Description:  Iterates over the ready threads list and invokes Function on 
+----//               each entry passing an additional optional Context parameter.
+----// Returns:      STATUS
+----// Parameter:    IN PFUNC_ListFunction Function
+----// Parameter:    IN_OPT PVOID Context
+----//******************************************************************************
+----STATUS
+----ThreadExecuteForEachReadyThreadEntry(
+----	IN      PFUNC_ListFunction  Function,
+----	IN_OPT  PVOID               Context
+----);
+----
+--- 
+--- //******************************************************************************O
+--- // Function:     GetCurrentThread
+---diff --git a/src/HAL9000/src/cmd_interpreter.c b/src/HAL9000/src/cmd_interpreter.c
+---index 2b649fa..d0b254f 100644
+------ a/src/HAL9000/src/cmd_interpreter.c
+---+++ b/src/HAL9000/src/cmd_interpreter.c
+---@@ -68,7 +68,6 @@ static const COMMAND_DEFINITION COMMANDS[] =
+---                 "\n\t$TIMES - number of times to wait for timer, valid only if periodic", CmdTestTimer, 1, 3},
+--- 
+---     { "threads", "Displays all threads", CmdListThreads, 0, 0},
+----    { "readythreads", "Displays all ready threads", CmdListReadyThreads, 0, 0},
+---     { "run", "$TEST [$NO_OF_THREADS]\n\tRuns the $TEST specified"
+---              "\n\t$NO_OF_THREADS the number of threads for running the test,"
+---              "if the number is not specified then it will run on 2 * NumberOfProcessors",
+---diff --git a/src/HAL9000/src/cmd_thread_helper.c b/src/HAL9000/src/cmd_thread_helper.c
+---index a3e3cab..f794c95 100644
+------ a/src/HAL9000/src/cmd_thread_helper.c
+---+++ b/src/HAL9000/src/cmd_thread_helper.c
+---@@ -72,7 +72,6 @@ _CmdReadAndDumpCpuid(
+---     );
+--- 
+--- static FUNC_ListFunction _CmdThreadPrint;
+----static FUNC_ListFunction _CmdReadyThreadPrint;
+--- 
+--- void
+--- (__cdecl CmdListCpus)(
+---@@ -130,12 +129,7 @@ void
+--- 
+---     ASSERT(NumberOfParameters == 0);
+--- 
+----    DWORD threadCount;
+----    GetNumberOfThreads(&threadCount);
+----
+----    LOG("Thread count: %d\n", threadCount);
+---     LOG("%7s", "TID|");
+----    LOG("%9s", "PTID|");
+---     LOG("%20s", "Name|");
+---     LOG("%5s", "Prio|");
+---     LOG("%8s", "State|");
+---@@ -149,34 +143,6 @@ void
+---     ASSERT( SUCCEEDED(status));
+--- }
+--- 
+----void
+----(__cdecl CmdListReadyThreads)(
+----	IN          QWORD       NumberOfParameters
+----	)
+----{
+----	STATUS status;
+----
+----	ASSERT(NumberOfParameters == 0);
+----
+----	DWORD threadCount;
+----	GetNumberOfReadyThreads(&threadCount);
+----
+----	LOG("Ready thread count: %d\n", threadCount);
+----	LOG("%7s", "TID|");
+----	LOG("%9s", "PTID|");
+----	LOG("%20s", "Name|");
+----	LOG("%5s", "Prio|");
+----	LOG("%8s", "State|");
+----	LOG("%10s", "Cmp ticks|");
+----	LOG("%10s", "Prt ticks|");
+----	LOG("%10s", "Ttl ticks|");
+----	LOG("%10s", "Process|");
+----	LOG("\n");
+----
+----	status = ThreadExecuteForEachReadyThreadEntry(_CmdReadyThreadPrint, NULL);
+----	ASSERT(SUCCEEDED(status));
+----}
+----
+--- void
+--- (__cdecl CmdYield)(
+---     IN          QWORD       NumberOfParameters
+---@@ -720,7 +686,6 @@ STATUS
+---     pThread = CONTAINING_RECORD(ListEntry, THREAD, AllList );
+--- 
+---     LOG("%6x%c", pThread->Id, '|');
+----    LOG("%8x%c", pThread->ParentTID, '|');
+---     LOG("%19s%c", pThread->Name, '|');
+---     LOG("%4U%c", pThread->Priority, '|');
+---     LOG("%7s%c", _CmdThreadStateToName(pThread->State), '|');
+---@@ -733,35 +698,6 @@ STATUS
+---     return STATUS_SUCCESS;
+--- }
+--- 
+----static
+----STATUS
+----(__cdecl _CmdReadyThreadPrint) (
+----	IN      PLIST_ENTRY     ListEntry,
+----	IN_OPT  PVOID           FunctionContext
+----	)
+----{
+----	PTHREAD pThread;
+----
+----	ASSERT(NULL != ListEntry);
+----	ASSERT(NULL == FunctionContext);
+----
+----    
+----	pThread = CONTAINING_RECORD(ListEntry, THREAD, ReadyList);
+----
+----	LOG("%6x%c", pThread->Id, '|');
+----	LOG("%8x%c", pThread->ParentTID, '|');
+----	LOG("%19s%c", pThread->Name, '|');
+----	LOG("%4U%c", pThread->Priority, '|');
+----	LOG("%7s%c", _CmdThreadStateToName(pThread->State), '|');
+----	LOG("%9U%c", pThread->TickCountCompleted, '|');
+----	LOG("%9U%c", pThread->TickCountEarly, '|');
+----	LOG("%9U%c", pThread->TickCountCompleted + pThread->TickCountEarly, '|');
+----	LOG("%9x%c", pThread->Process->Id, '|');
+----	LOG("\n");
+----
+----	return STATUS_SUCCESS;
+----}
+----
+--- static
+--- void
+--- _CmdReadAndDumpCpuid(
+---diff --git a/src/HAL9000/src/iomu.c b/src/HAL9000/src/iomu.c
+---index ae9c84a..a704910 100644
+------ a/src/HAL9000/src/iomu.c
+---+++ b/src/HAL9000/src/iomu.c
+---@@ -28,7 +28,7 @@
+--- #define PIC_MASTER_OFFSET                   0x20
+--- #define PIC_SLAVE_OFFSET                    0x28
+--- 
+----#define SCHEDULER_TIMER_INTERRUPT_TIME_US   (10*MS_IN_US)
+---+#define SCHEDULER_TIMER_INTERRUPT_TIME_US   (40*MS_IN_US)
+--- 
+--- #define HAL9000_SYSTEM_FILE_NAME            "HAL9000.ini"
+--- 
+---diff --git a/src/HAL9000/src/thread.c b/src/HAL9000/src/thread.c
+---index 18ce83c..b311f0c 100644
+------ a/src/HAL9000/src/thread.c
+---+++ b/src/HAL9000/src/thread.c
+---@@ -10,9 +10,9 @@
+--- #include "gdtmu.h"
+--- #include "pe_exports.h"
+--- 
+----#define TID_INCREMENT               0x10
+---+#define TID_INCREMENT               4
+--- 
+----#define THREAD_TIME_SLICE           4
+---+#define THREAD_TIME_SLICE           1
+--- 
+--- extern void ThreadStart();
+--- 
+---@@ -36,16 +36,6 @@ typedef struct _THREAD_SYSTEM_DATA
+--- 
+---     _Guarded_by_(ReadyThreadsLock)
+---     LIST_ENTRY          ReadyThreadsList;
+----
+----    LOCK                AllThreadsCountLock;
+----
+----	_Guarded_by_(AllThreadsCountLock)
+----    DWORD               AllThreadsCount;
+----
+----	LOCK                ReadyThreadsCountLock;
+----
+----	_Guarded_by_(ReadyThreadsCountLock)
+----	DWORD               ReadyThreadsCount;
+--- } THREAD_SYSTEM_DATA, *PTHREAD_SYSTEM_DATA;
+--- 
+--- static THREAD_SYSTEM_DATA m_threadSystemData;
+---@@ -155,12 +145,6 @@ ThreadSystemPreinit(
+--- 
+---     InitializeListHead(&m_threadSystemData.ReadyThreadsList);
+---     LockInit(&m_threadSystemData.ReadyThreadsLock);
+----
+----    m_threadSystemData.AllThreadsCount = 0;
+----    LockInit(&m_threadSystemData.AllThreadsCountLock);
+----
+----    m_threadSystemData.ReadyThreadsCount = 0;
+----    LockInit(&m_threadSystemData.ReadyThreadsCountLock);
+--- }
+--- 
+--- STATUS
+---@@ -276,22 +260,6 @@ ThreadSystemInitIdleForCurrentCPU(
+---     return status;
+--- }
+--- 
+----STATUS GetNumberOfThreads(
+----	OUT     DWORD* threadCount
+----)
+----{
+----	*threadCount = m_threadSystemData.AllThreadsCount;
+----	return STATUS_SUCCESS;
+----}
+----
+----STATUS GetNumberOfReadyThreads(
+----	OUT     DWORD* threadCount
+----)
+----{
+----	*threadCount = m_threadSystemData.ReadyThreadsCount;
+----	return STATUS_SUCCESS;
+----}
+----
+--- STATUS
+--- ThreadCreate(
+---     IN_Z        char*               Name,
+---@@ -475,7 +443,7 @@ ThreadTick(
+---     if (++pCpu->ThreadData.RunningThreadTicks >= THREAD_TIME_SLICE)
+---     {
+---         LOG_TRACE_THREAD("Will yield on return\n");
+----        //pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+---+        pCpu->ThreadData.YieldOnInterruptReturn = TRUE;
+---     }
+--- }
+--- 
+---@@ -498,8 +466,8 @@ ThreadYield(
+--- 
+---     ASSERT( NULL != pCpu );
+--- 
+----    bForcedYield = TRUE;
+----    //pCpu->ThreadData.YieldOnInterruptReturn = FALSE;
+---+    bForcedYield = pCpu->ThreadData.YieldOnInterruptReturn;
+---+    pCpu->ThreadData.YieldOnInterruptReturn = FALSE;
+--- 
+---     if (THREAD_FLAG_FORCE_TERMINATE_PENDING == _InterlockedAnd(&pThread->Flags, MAX_DWORD))
+---     {
+---@@ -511,9 +479,6 @@ ThreadYield(
+---     if (pThread != pCpu->ThreadData.IdleThread)
+---     {
+---         InsertTailList(&m_threadSystemData.ReadyThreadsList, &pThread->ReadyList);
+----		LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+----		m_threadSystemData.ReadyThreadsCount++;
+----		LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
+---     }
+---     if (!bForcedYield)
+---     {
+---@@ -572,10 +537,6 @@ ThreadUnblock(
+---     Thread->State = ThreadStateReady;
+---     LockRelease(&m_threadSystemData.ReadyThreadsLock, dummyState );
+---     LockRelease(&Thread->BlockLock, oldState);
+----
+----	LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+----	m_threadSystemData.ReadyThreadsCount++;
+----	LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
+--- }
+--- 
+--- void
+---@@ -613,8 +574,7 @@ ThreadYieldOnInterrupt(
+---     void
+---     )
+--- {
+----    //return GetCurrentPcpu()->ThreadData.YieldOnInterruptReturn;
+----    return FALSE;
+---+    return GetCurrentPcpu()->ThreadData.YieldOnInterruptReturn;
+--- }
+--- 
+--- void
+---@@ -730,33 +690,6 @@ ThreadExecuteForEachThreadEntry(
+---     return status;
+--- }
+--- 
+----STATUS
+----ThreadExecuteForEachReadyThreadEntry(
+----	IN      PFUNC_ListFunction  Function,
+----	IN_OPT  PVOID               Context
+----)
+----{
+----	STATUS status;
+----	INTR_STATE oldState;
+----
+----	if (NULL == Function)
+----	{
+----		return STATUS_INVALID_PARAMETER1;
+----	}
+----
+----	status = STATUS_SUCCESS;
+----
+----	LockAcquire(&m_threadSystemData.ReadyThreadsLock, &oldState);
+----	status = ForEachElementExecute(&m_threadSystemData.ReadyThreadsList,
+----		Function,
+----		Context,
+----		FALSE
+----	);
+----	LockRelease(&m_threadSystemData.ReadyThreadsLock, oldState);
+----
+----	return status;
+----}
+----
+--- void
+--- SetCurrentThread(
+---     IN      PTHREAD     Thread
+---@@ -861,31 +794,11 @@ _ThreadInit(
+---         pThread->State = ThreadStateBlocked;
+---         pThread->Priority = Priority;
+--- 
+----        if (pThread->Id != 0) {
+----			PTHREAD parentThread = GetCurrentThread();
+----            if (parentThread != NULL) {
+----                pThread->ParentTID = parentThread->Id;
+----            }
+----            else {
+----                pThread->ParentTID = 1;
+----            }
+----        }
+----        else {
+----            pThread->ParentTID = 0xffffffff;
+----        }
+----
+----
+---         LockInit(&pThread->BlockLock);
+--- 
+---         LockAcquire(&m_threadSystemData.AllThreadsLock, &oldIntrState);
+---         InsertTailList(&m_threadSystemData.AllThreadsList, &pThread->AllList);
+---         LockRelease(&m_threadSystemData.AllThreadsLock, oldIntrState);
+----
+----		LockAcquire(&m_threadSystemData.AllThreadsCountLock, &oldIntrState);
+----        m_threadSystemData.AllThreadsCount++;
+----		LockRelease(&m_threadSystemData.AllThreadsCountLock, oldIntrState);
+----    
+----        LOG("Thread with name %s and TID 0x%x has been created\n", pThread->Name, pThread->Id);
+---     }
+---     __finally
+---     {
+---@@ -1193,11 +1106,10 @@ PTHREAD
+--- _ThreadGetReadyThread(
+---     void
+---     )
+----{  
+---+{
+---     PTHREAD pNextThread;
+---     PLIST_ENTRY pEntry;
+---     BOOLEAN bIdleScheduled;
+----    INTR_STATE dummyState;
+--- 
+---     ASSERT( INTR_OFF == CpuIntrGetState());
+---     ASSERT( LockIsOwner(&m_threadSystemData.ReadyThreadsLock));
+---@@ -1213,9 +1125,7 @@ _ThreadGetReadyThread(
+---     else
+---     {
+---         pNextThread = CONTAINING_RECORD( pEntry, THREAD, ReadyList );
+----		LockAcquire(&m_threadSystemData.ReadyThreadsCountLock, &dummyState);
+----		m_threadSystemData.ReadyThreadsCount--;
+----		LockRelease(&m_threadSystemData.ReadyThreadsCountLock, dummyState);
+---+
+---         ASSERT( pNextThread->State == ThreadStateReady );
+---         bIdleScheduled = FALSE;
+---     }
+---@@ -1281,12 +1191,6 @@ _ThreadDestroy(
+---     RemoveEntryList(&pThread->AllList);
+---     LockRelease(&m_threadSystemData.AllThreadsLock, oldState);
+--- 
+----	LockAcquire(&m_threadSystemData.AllThreadsCountLock, &oldState);
+----    m_threadSystemData.AllThreadsCount--;
+----	LockRelease(&m_threadSystemData.AllThreadsCountLock, oldState);
+----
+----    LOG("Thread with name %s and TID 0x%x has been destroyed\n", pThread->Name, pThread->Id);
+----
+---     // This must be done before removing the thread from the process list, else
+---     // this may be the last thread and the process VAS will be freed by the time
+---     // ProcessRemoveThreadFromList - this function also dereferences the process
+--diff --git a/postbuild/paths.cmd b/postbuild/paths.cmd
+--index 7757346..cec924b 100644
+----- a/postbuild/paths.cmd
+--+++ b/postbuild/paths.cmd
+--@@ -12,7 +12,6 @@ set PATH_TO_VM_DISK=__EMPTY__
+-- set PATH_TO_VM_TOOLS=__EMPTY__
+-- set VOL_MOUNT_LETTER=__EMPTY__
+-- 
+---if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
+-- if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
+-- if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
+-- if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
+--@@ -70,14 +69,4 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
+-- 
+-- goto end
+-- 
+---:config_DESKTOP-NITRO5
+---
+---SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+---SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+---SET PATH_TO_VIX_TOOLS="F:\Programe\VMWare"
+---SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+---SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+---SET VOL_MOUNT_LETTER="Q:"
+---goto end
+---
+-- :end
+--\ No newline at end of file
+--diff --git a/src/HAL9000/src/.idea/.gitignore b/src/HAL9000/src/.idea/.gitignore
+--deleted file mode 100644
+--index 13566b8..0000000
+----- a/src/HAL9000/src/.idea/.gitignore
+--+++ /dev/null
+--@@ -1,8 +0,0 @@
+---# Default ignored files
+---/shelf/
+---/workspace.xml
+---# Editor-based HTTP Client requests
+---/httpRequests/
+---# Datasource local storage ignored files
+---/dataSources/
+---/dataSources.local.xml
+--diff --git a/src/HAL9000/src/.idea/modules.xml b/src/HAL9000/src/.idea/modules.xml
+--deleted file mode 100644
+--index f669a0e..0000000
+----- a/src/HAL9000/src/.idea/modules.xml
+--+++ /dev/null
+--@@ -1,8 +0,0 @@
+---<?xml version="1.0" encoding="UTF-8"?>
+---<project version="4">
+---  <component name="ProjectModuleManager">
+---    <modules>
+---      <module fileurl="file://$PROJECT_DIR$/.idea/src.iml" filepath="$PROJECT_DIR$/.idea/src.iml" />
+---    </modules>
+---  </component>
+---</project>
+--\ No newline at end of file
+--diff --git a/src/HAL9000/src/.idea/src.iml b/src/HAL9000/src/.idea/src.iml
+--deleted file mode 100644
+--index bc2cd87..0000000
+----- a/src/HAL9000/src/.idea/src.iml
+--+++ /dev/null
+--@@ -1,8 +0,0 @@
+---<?xml version="1.0" encoding="UTF-8"?>
+---<module type="CPP_MODULE" version="4">
+---  <component name="NewModuleRootManager">
+---    <content url="file://$MODULE_DIR$" />
+---    <orderEntry type="inheritedJdk" />
+---    <orderEntry type="sourceFolder" forTests="false" />
+---  </component>
+---</module>
+--\ No newline at end of file
+--diff --git a/src/HAL9000/src/.idea/vcs.xml b/src/HAL9000/src/.idea/vcs.xml
+--deleted file mode 100644
+--index c2365ab..0000000
+----- a/src/HAL9000/src/.idea/vcs.xml
+--+++ /dev/null
+--@@ -1,6 +0,0 @@
+---<?xml version="1.0" encoding="UTF-8"?>
+---<project version="4">
+---  <component name="VcsDirectoryMappings">
+---    <mapping directory="$PROJECT_DIR$/../../.." vcs="Git" />
+---  </component>
+---</project>
+--\ No newline at end of file
+--diff --git a/src/HAL9000/src/system.c b/src/HAL9000/src/system.c
+--index 24e1515..b0b436e 100644
+----- a/src/HAL9000/src/system.c
+--+++ b/src/HAL9000/src/system.c
+--@@ -70,8 +70,8 @@ SystemInit(
+--     status = STATUS_SUCCESS;
+--     pCpu = NULL;
+-- 
+---    LogSystemInit(LogLevelError,
+---                  LogComponentInterrupt | LogComponentIo | LogComponentAcpi | LogComponentCpu,
+--+    LogSystemInit(LogLevelInfo,
+--+                  LogComponentInterrupt | LogComponentIo | LogComponentAcpi,
+--                   TRUE
+--                   );
+-- 
+--@@ -313,9 +313,6 @@ SystemInit(
+-- 
+--     LOGL("Network stack successfully initialized\n");
+-- 
+---    LogSetLevel(LogLevelTrace);
+---    LogSetTracedComponents(LogComponentThread);
+---
+--     return status;
+-- }
+-- 
+--diff --git a/src/HAL9000/src/thread.c b/src/HAL9000/src/thread.c
+--index 5221f37..b311f0c 100644
+----- a/src/HAL9000/src/thread.c
+--+++ b/src/HAL9000/src/thread.c
+--@@ -173,7 +173,7 @@ ThreadSystemInitMainForCurrentCPU(
+--     if (!SUCCEEDED(status))
+--     {
+--         LOG_FUNC_ERROR("_ThreadInit", status );
+---        status = _ThreadInit(mainThreadName, ThreadPriorityDefault, NULL, FALSE);
+--+        return status;
+--     }
+--     LOGPL("_ThreadInit succeeded\n");
+-- 
+-diff --git a/postbuild/paths.cmd b/postbuild/paths.cmd
+-index a46a2ba..cec924b 100644
+---- a/postbuild/paths.cmd
+-+++ b/postbuild/paths.cmd
+-@@ -12,7 +12,6 @@ set PATH_TO_VM_DISK=__EMPTY__
+- set PATH_TO_VM_TOOLS=__EMPTY__
+- set VOL_MOUNT_LETTER=__EMPTY__
+- 
+--if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
+- if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
+- if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
+- if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
+-@@ -70,14 +69,4 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
+- 
+- goto end
+- 
+--:config_DESKTOP-NITRO5
+--
+--SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+--SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+--SET VOL_MOUNT_LETTER="Q:"
+--SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+--SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+--SET PATH_TO_VIX_TOOLS="F:\Programe\VMWare"
+--goto end
+--
+- :end
+-\ No newline at end of file
+-diff --git a/src/.vs/HAL9000/FileContentIndex/d4d17d4d-bf39-4236-94f5-e98c33e65fa1.vsidx b/src/.vs/HAL9000/FileContentIndex/d4d17d4d-bf39-4236-94f5-e98c33e65fa1.vsidx
+-deleted file mode 100644
+-index 0b19eed..0000000
+-Binary files a/src/.vs/HAL9000/FileContentIndex/d4d17d4d-bf39-4236-94f5-e98c33e65fa1.vsidx and /dev/null differ
+-diff --git a/src/CommonLib/inc/status.h b/src/CommonLib/inc/status.h
+-index 081c568..7f657ec 100644
+---- a/src/CommonLib/inc/status.h
+-+++ b/src/CommonLib/inc/status.h
+-@@ -118,8 +118,6 @@ C_HEADER_START
+- 
+- // timer related errors
+- #define CL_STATUS_TIMER_INVALID_FREQUENCY                  (ERROR_MASK | CUSTOMER_BIT | TIMER_MASK | 0x0001UL)
+--#define CL_STATUS_TIMER_NOT_EXPIRED_YET					   (INFO_MASK | CUSTOMER_BIT | TIMER_MASK | 0x0002UL)
+--
+- 
+- // heap related errors
+- #define CL_STATUS_HEAP_TOO_SMALL                           (ERROR_MASK | CUSTOMER_BIT | HEAP_MASK | 0x0001UL)
+-@@ -291,7 +289,6 @@ typedef _Return_type_success_(SUCCEEDED(return)) DWORD  STATUS;
+- 
+- // timer related errors
+- #define STATUS_TIMER_INVALID_FREQUENCY                  CL_STATUS_TIMER_INVALID_FREQUENCY
+--#define STATUS_TIMER_NOT_EXPIRED_YET					CL_STATUS_TIMER_NOT_EXPIRED_YET
+- 
+- // heap related errors
+- #define STATUS_HEAP_TOO_SMALL                           CL_STATUS_HEAP_TOO_SMALL
+-diff --git a/src/HAL9000/HAL9000.vcxproj b/src/HAL9000/HAL9000.vcxproj
+-index 4cf9d8f..0dd1641 100644
+---- a/src/HAL9000/HAL9000.vcxproj
+-+++ b/src/HAL9000/HAL9000.vcxproj
+-@@ -344,7 +344,6 @@
+-     <ClInclude Include="headers\os_info.h" />
+-     <ClInclude Include="headers\print.h" />
+-     <ClInclude Include="headers\scan_codes.h" />
+--    <ClInclude Include="headers\semaphore.h" />
+-     <ClInclude Include="headers\serial_comm.h" />
+-     <ClInclude Include="headers\smp.h" />
+-     <ClInclude Include="headers\synch.h" />
+-diff --git a/src/HAL9000/HAL9000.vcxproj.filters b/src/HAL9000/HAL9000.vcxproj.filters
+-index e76a67a..f31d483 100644
+---- a/src/HAL9000/HAL9000.vcxproj.filters
+-+++ b/src/HAL9000/HAL9000.vcxproj.filters
+-@@ -704,9 +704,6 @@
+-     <ClInclude Include="headers\test_process.h">
+-       <Filter>Header Files\debug\test\userprog</Filter>
+-     </ClInclude>
+--    <ClInclude Include="headers\semaphore.h">
+--      <Filter>Header Files\executive</Filter>
+--    </ClInclude>
+-   </ItemGroup>
+-   <ItemGroup>
+-     <None Include="src\defines.yasm">
+-diff --git a/src/HAL9000/headers/ex_timer.h b/src/HAL9000/headers/ex_timer.h
+-index 79e8c18..9339ccc 100644
+---- a/src/HAL9000/headers/ex_timer.h
+-+++ b/src/HAL9000/headers/ex_timer.h
+-@@ -1,7 +1,5 @@
+- #pragma once
+- 
+--#include "ex_event.h"
+--
+- typedef enum _EX_TIMER_TYPE
+- {
+-     ExTimerTypeAbsolute,
+-@@ -22,36 +20,8 @@ typedef struct _EX_TIMER
+- 
+-     volatile BOOLEAN    TimerStarted;
+-     BOOLEAN             TimerUninited;
+--
+--	// keep track of threads waiting ( blocked ) for the timer
+--	EX_EVENT TimerEvent;
+--
+--	// used to place the timer in a global timer list
+--	LIST_ENTRY TimerListElem;
+- } EX_TIMER, *PEX_TIMER;
+- 
+--//******************************************************************************
+--// Function:     ExTimerCheckAll
+--// Description:  Checks if each timer from the timer list is past its trigger 
+--//               time. Once this function returns, all timers that have their 
+--//               trigger time smaller than the system time have been triggered.
+--// Returns:      void
+--//******************************************************************************
+--void
+--ExTimerCheckAll(
+--    );
+--
+--//******************************************************************************
+--// Function:     ExTimerSystemPreinit
+--// Description:  Basic global initialization. Initializes the global timer list
+--//               and the lock protecting the list
+--// Returns:      void
+--//******************************************************************************
+--_No_competing_thread_
+--void
+--ExTimerSystemPreinit(
+--    );
+--
+- //******************************************************************************
+- // Function:     ExTimerInit
+- // Description:  Initializes a timer to trigger to trigger at a specified time.
+-diff --git a/src/HAL9000/headers/semaphore.h b/src/HAL9000/headers/semaphore.h
+-deleted file mode 100644
+-index 273b90d..0000000
+---- a/src/HAL9000/headers/semaphore.h
+-+++ /dev/null
+-@@ -1,36 +0,0 @@
+--#pragma once
+--
+--#include "common_lib.h"
+--#include "list.h"
+--#include "synch.h"
+--#include "mutex.h"
+--
+--typedef struct _SEMAPHORE
+--{
+--	MUTEX SemaphoreMutex;
+--
+--	_Guarded_by_(SemaphoreMutex)
+--	DWORD           Value;
+--
+--	_Guarded_by_(SemaphoreMutex)
+--	LIST_ENTRY          WaitingList;
+--} SEMAPHORE, *PSEMAPHORE;
+--
+--
+--void
+--SemaphoreInit(
+--	OUT     PSEMAPHORE      Semaphore,
+--	IN      DWORD           InitialValue
+--);
+--
+--void
+--SemaphoreDown(
+--	INOUT   PSEMAPHORE      Semaphore,
+--	IN      DWORD           Value
+--);
+--
+--void
+--SemaphoreUp(
+--	INOUT   PSEMAPHORE      Semaphore,
+--	IN      DWORD           Value
+--);
+-\ No newline at end of file
+-diff --git a/src/HAL9000/src/.idea/workspace.xml b/src/HAL9000/src/.idea/workspace.xml
+-deleted file mode 100644
+-index 7f5d0ff..0000000
+---- a/src/HAL9000/src/.idea/workspace.xml
+-+++ /dev/null
+-@@ -1,72 +0,0 @@
+--<?xml version="1.0" encoding="UTF-8"?>
+--<project version="4">
+--  <component name="AutoImportSettings">
+--    <option name="autoReloadType" value="SELECTIVE" />
+--  </component>
+--  <component name="CMakeSettings">
+--    <configurations>
+--      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+--      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+--      <configuration PROFILE_NAME="Debug-Visual Studio" ENABLED="true" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" />
+--      <configuration PROFILE_NAME="Release-Visual Studio" ENABLED="true" CONFIG_NAME="Release" TOOLCHAIN_NAME="Visual Studio" />
+--    </configurations>
+--  </component>
+--  <component name="ChangeListManager">
+--    <list default="true" id="05cb5fcc-2ece-4050-b9b7-3185f2ca27aa" name="Changes" comment="" />
+--    <option name="SHOW_DIALOG" value="false" />
+--    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+--    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+--    <option name="LAST_RESOLUTION" value="IGNORE" />
+--  </component>
+--  <component name="ClangdSettings">
+--    <option name="formatViaClangd" value="false" />
+--  </component>
+--  <component name="Git.Settings">
+--    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+--  </component>
+--  <component name="ProjectApplicationVersion">
+--    <option name="ide" value="CLion" />
+--    <option name="majorVersion" value="2023" />
+--    <option name="minorVersion" value="2.2" />
+--  </component>
+--  <component name="ProjectColorInfo">{
+--  &quot;associatedIndex&quot;: 8
+--}</component>
+--  <component name="ProjectId" id="2Wnr3FwEIq9a8x5w8q8syz3hbkA" />
+--  <component name="ProjectViewState">
+--    <option name="hideEmptyMiddlePackages" value="true" />
+--    <option name="showLibraryContents" value="true" />
+--  </component>
+--  <component name="PropertiesComponent"><![CDATA[{
+--  "keyToString": {
+--    "RunOnceActivity.OpenProjectViewOnStart": "true",
+--    "RunOnceActivity.ShowReadmeOnStart": "true",
+--    "RunOnceActivity.cidr.known.project.marker": "true",
+--    "WebServerToolWindowFactoryState": "false",
+--    "cf.first.check.clang-format": "false",
+--    "cidr.known.project.marker": "true",
+--    "node.js.detected.package.eslint": "true",
+--    "node.js.detected.package.tslint": "true",
+--    "node.js.selected.package.eslint": "(autodetect)",
+--    "node.js.selected.package.tslint": "(autodetect)",
+--    "settings.editor.selected.configurable": "CMakeSettings",
+--    "vue.rearranger.settings.migration": "true"
+--  }
+--}]]></component>
+--  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+--  <component name="TaskManager">
+--    <task active="true" id="Default" summary="Default task">
+--      <changelist id="05cb5fcc-2ece-4050-b9b7-3185f2ca27aa" name="Changes" comment="" />
+--      <created>1697087272225</created>
+--      <option name="number" value="Default" />
+--      <option name="presentableId" value="Default" />
+--      <updated>1697087272225</updated>
+--      <workItem from="1697378987320" duration="51000" />
+--      <workItem from="1697398266271" duration="608000" />
+--    </task>
+--    <servers />
+--  </component>
+--  <component name="TypeScriptGeneratedFilesManager">
+--    <option name="version" value="3" />
+--  </component>
+--</project>
+-\ No newline at end of file
+-diff --git a/src/HAL9000/src/ex_system.c b/src/HAL9000/src/ex_system.c
+-index 67b8341..bf91550 100644
+---- a/src/HAL9000/src/ex_system.c
+-+++ b/src/HAL9000/src/ex_system.c
+-@@ -1,6 +1,5 @@
+- #include "HAL9000.h"
+- #include "ex_system.h"
+--#include "ex_timer.h"
+- #include "thread_internal.h"
+- 
+- void
+-@@ -8,6 +7,5 @@ ExSystemTimerTick(
+-     void
+-     )
+- {
+--    ExTimerCheckAll();
+-     ThreadTick();
+- }
+-\ No newline at end of file
+-diff --git a/src/HAL9000/src/ex_timer.c b/src/HAL9000/src/ex_timer.c
+-index 8924f4e..65c769f 100644
+---- a/src/HAL9000/src/ex_timer.c
+-+++ b/src/HAL9000/src/ex_timer.c
+-@@ -3,85 +3,6 @@
+- #include "iomu.h"
+- #include "thread_internal.h"
+- 
+--typedef struct _GLOBAL_TIMER_LIST
+--{
+--	// protect the global timer list
+--	LOCK TimerListLock;
+--
+--	// the list’s head
+--	LIST_ENTRY TimerListHead;
+--}GLOBAL_TIMER_LIST;
+--
+--static GLOBAL_TIMER_LIST m_globalTimerList;
+--
+--void
+--ExTimerSystemPreinit(
+--    void
+--    )
+--{
+--    memzero(&m_globalTimerList, sizeof(GLOBAL_TIMER_LIST));
+--
+--	InitializeListHead(&m_globalTimerList.TimerListHead);
+--	LockInit(&m_globalTimerList.TimerListLock);
+--}
+--
+--INT64
+--ExTimerCompareListElems(
+--    IN      PLIST_ENTRY Timer1,
+--    IN      PLIST_ENTRY Timer2,
+--    IN_OPT  PVOID       Context
+--)
+--{
+--    ASSERT(Context == NULL);
+--    ASSERT(Timer1 != NULL);
+--    ASSERT(Timer2 != NULL);
+--
+--    return ExTimerCompareTimers(CONTAINING_RECORD(Timer1, EX_TIMER, TimerListElem), CONTAINING_RECORD(Timer2, EX_TIMER, TimerListElem));
+--}
+--
+--INT64
+--ExTimerCompareTimers(
+--	IN      PEX_TIMER     FirstElem,
+--	IN      PEX_TIMER     SecondElem
+--)
+--{
+--    ASSERT(FirstElem != NULL);
+--    ASSERT(SecondElem != NULL);
+--	return FirstElem->TriggerTimeUs - SecondElem->TriggerTimeUs;
+--}
+--
+--STATUS
+--ExTimerCheck(
+--    IN      PLIST_ENTRY     TimerListEntry,
+--	IN_OPT  PVOID           FunctionContext
+--    ) 
+--{
+--    ASSERT(FunctionContext == NULL);
+--
+--    if (TimerListEntry == NULL) {
+--        return STATUS_INVALID_PARAMETER1;
+--    }
+--
+--    PEX_TIMER Timer = CONTAINING_RECORD(TimerListEntry, EX_TIMER, TimerListElem);
+--    if (IomuGetSystemTimeUs() >= Timer->TriggerTimeUs) {
+--        ExEventSignal(&Timer->TimerEvent);
+--        return STATUS_SUCCESS;
+--    }
+--    return STATUS_TIMER_NOT_EXPIRED_YET;
+--}
+--
+--void
+--ExTimerCheckAll(
+--    void
+--    )
+--{
+--    INTR_STATE dummyState;
+--
+--	LockAcquire(&m_globalTimerList.TimerListLock, &dummyState);
+--    ForEachElementExecute(&m_globalTimerList.TimerListHead, ExTimerCheck, NULL, 0);
+--	LockRelease(&m_globalTimerList.TimerListLock, dummyState);
+--}
+--
+- STATUS
+- ExTimerInit(
+-     OUT     PEX_TIMER       Timer,
+-@@ -90,9 +11,8 @@ ExTimerInit(
+-     )
+- {
+-     STATUS status;
+--    INTR_STATE dummyState;
+- 
+--    if (Timer == NULL)
+-+    if (NULL == Timer)
+-     {
+-         return STATUS_INVALID_PARAMETER1;
+-     }
+-@@ -122,12 +42,6 @@ ExTimerInit(
+-         Timer->TriggerTimeUs = Time;
+-     }
+- 
+--    LockAcquire(&m_globalTimerList.TimerListLock, &dummyState);
+--    InsertOrderedList(&m_globalTimerList.TimerListHead, &Timer->TimerListElem, ExTimerCompareListElems, NULL);
+--    LockRelease(&m_globalTimerList.TimerListLock, dummyState);
+--
+--    ExEventInit(&Timer->TimerEvent, ExEventTypeNotification, 0);
+--
+-     return status;
+- }
+- 
+-@@ -159,8 +73,6 @@ ExTimerStop(
+-     }
+- 
+-     Timer->TimerStarted = FALSE;
+--
+--    ExEventSignal(&Timer->TimerEvent);
+- }
+- 
+- void
+-@@ -175,7 +87,10 @@ ExTimerWait(
+-         return;
+-     }
+- 
+--    ExEventWaitForSignal(&Timer->TimerEvent);
+-+    while (IomuGetSystemTimeUs() < Timer->TriggerTimeUs && Timer->TimerStarted)
+-+    {
+-+        ThreadYield();
+-+    }
+- }
+- 
+- void
+-@@ -183,15 +98,18 @@ ExTimerUninit(
+-     INOUT   PEX_TIMER       Timer
+-     )
+- {
+--    INTR_STATE dummyState;
+--
+-     ASSERT(Timer != NULL);
+- 
+-     ExTimerStop(Timer);
+- 
+-     Timer->TimerUninited = TRUE;
+-+}
+- 
+--	LockAcquire(&m_globalTimerList.TimerListLock, &dummyState);
+--    RemoveEntryList(&Timer->TimerListElem);
+--	LockRelease(&m_globalTimerList.TimerListLock, dummyState);
+-+INT64
+-+ExTimerCompareTimers(
+-+    IN      PEX_TIMER     FirstElem,
+-+    IN      PEX_TIMER     SecondElem
+-+)
+-+{
+-+    return FirstElem->TriggerTimeUs - SecondElem->TriggerTimeUs;
+- }
+-\ No newline at end of file
+-diff --git a/src/HAL9000/src/semaphore.c b/src/HAL9000/src/semaphore.c
+-deleted file mode 100644
+-index a4684de..0000000
+---- a/src/HAL9000/src/semaphore.c
+-+++ /dev/null
+-@@ -1,51 +0,0 @@
+--#include "HAL9000.h"
+--#include "thread_internal.h"
+--#include "semaphore.h"
+--#include "mutex.h"
+--
+--void
+--SemaphoreInit(
+--	OUT     PSEMAPHORE      Semaphore,
+--	IN      DWORD           InitialValue
+--)
+--{
+--	ASSERT(NULL != Semaphore);
+--
+--	memzero(Semaphore, sizeof(SEMAPHORE));
+--
+--	MutexInit(&Semaphore->SemaphoreMutex);
+--
+--	InitializeListHead(&Semaphore->WaitingList);
+--
+--	Semaphore->Value = InitialValue;
+--}
+--
+--void
+--SemaphoreDown(
+--	INOUT   PSEMAPHORE      Semaphore,
+--	IN      DWORD           Value
+--)
+--{
+--	INTR_STATE dummyState;
+--	MutexAcquire(&Semaphore->SemaphoreMutex);
+--	if (Semaphore->Value > Value) {
+--		Semaphore->Value -= Value;
+--	}
+--	else {
+--		PTHREAD pCurrentThread = GetCurrentThread();
+--		InsertTailList(&Semaphore->WaitingList, &pCurrentThread->ReadyList);
+--		MutexRelease(&Semaphore->SemaphoreMutex);
+--		ThreadBlock();
+--		MutexAcquire(&Semaphore->SemaphoreMutex);		
+--	}
+--	MutexRelease(&Semaphore->SemaphoreMutex	);
+--}
+--
+--void
+--SemaphoreUp(
+--	INOUT   PSEMAPHORE      Semaphore,
+--	IN      DWORD           Value
+--)
+--{
+--	
+--}
+-\ No newline at end of file
+-diff --git a/src/HAL9000/src/system.c b/src/HAL9000/src/system.c
+-index d846a58..b0b436e 100644
+---- a/src/HAL9000/src/system.c
+-+++ b/src/HAL9000/src/system.c
+-@@ -21,7 +21,6 @@
+- #include "ex_system.h"
+- #include "process_internal.h"
+- #include "boot_module.h"
+--#include "ex_timer.h"
+- 
+- #define NO_OF_TSS_STACKS             7
+- STATIC_ASSERT(NO_OF_TSS_STACKS <= NO_OF_IST);
+-@@ -58,7 +57,6 @@ SystemPreinit(
+-     CorePreinit();
+-     NetworkStackPreinit();
+-     ProcessSystemPreinit();
+--    ExTimerSystemPreinit();
+- }
+- 
+- STATUS
 diff --git a/src/.vs/HAL9000/FileContentIndex/d4d17d4d-bf39-4236-94f5-e98c33e65fa1.vsidx b/src/.vs/HAL9000/FileContentIndex/d4d17d4d-bf39-4236-94f5-e98c33e65fa1.vsidx
 deleted file mode 100644
 index 0b19eed..0000000
@@ -768,49 +1923,6 @@ index 79e8c18..9339ccc 100644
  //******************************************************************************
  // Function:     ExTimerInit
  // Description:  Initializes a timer to trigger to trigger at a specified time.
-diff --git a/src/HAL9000/headers/semaphore.h b/src/HAL9000/headers/semaphore.h
-deleted file mode 100644
-index 273b90d..0000000
---- a/src/HAL9000/headers/semaphore.h
-+++ /dev/null
-@@ -1,36 +0,0 @@
--#pragma once
--
--#include "common_lib.h"
--#include "list.h"
--#include "synch.h"
--#include "mutex.h"
--
--typedef struct _SEMAPHORE
--{
--	MUTEX SemaphoreMutex;
--
--	_Guarded_by_(SemaphoreMutex)
--	DWORD           Value;
--
--	_Guarded_by_(SemaphoreMutex)
--	LIST_ENTRY          WaitingList;
--} SEMAPHORE, *PSEMAPHORE;
--
--
--void
--SemaphoreInit(
--	OUT     PSEMAPHORE      Semaphore,
--	IN      DWORD           InitialValue
--);
--
--void
--SemaphoreDown(
--	INOUT   PSEMAPHORE      Semaphore,
--	IN      DWORD           Value
--);
--
--void
--SemaphoreUp(
--	INOUT   PSEMAPHORE      Semaphore,
--	IN      DWORD           Value
--);
-\ No newline at end of file
 diff --git a/src/HAL9000/src/.idea/workspace.xml b/src/HAL9000/src/.idea/workspace.xml
 deleted file mode 100644
 index 7f5d0ff..0000000
@@ -910,7 +2022,7 @@ index 67b8341..bf91550 100644
  }
 \ No newline at end of file
 diff --git a/src/HAL9000/src/ex_timer.c b/src/HAL9000/src/ex_timer.c
-index 8924f4e..65c769f 100644
+index 92a3bee..65c769f 100644
 --- a/src/HAL9000/src/ex_timer.c
 +++ b/src/HAL9000/src/ex_timer.c
 @@ -3,85 +3,6 @@
@@ -977,7 +2089,7 @@ index 8924f4e..65c769f 100644
 -    }
 -
 -    PEX_TIMER Timer = CONTAINING_RECORD(TimerListEntry, EX_TIMER, TimerListElem);
--    if (IomuGetSystemTimeUs() >= Timer->TriggerTimeUs) {
+-    if (Timer->TimerStarted && IomuGetSystemTimeUs() >= Timer->TriggerTimeUs) {
 -        ExEventSignal(&Timer->TimerEvent);
 -        return STATUS_SUCCESS;
 -    }
@@ -1068,64 +2180,6 @@ index 8924f4e..65c769f 100644
 +{
 +    return FirstElem->TriggerTimeUs - SecondElem->TriggerTimeUs;
  }
-\ No newline at end of file
-diff --git a/src/HAL9000/src/semaphore.c b/src/HAL9000/src/semaphore.c
-deleted file mode 100644
-index a4684de..0000000
---- a/src/HAL9000/src/semaphore.c
-+++ /dev/null
-@@ -1,51 +0,0 @@
--#include "HAL9000.h"
--#include "thread_internal.h"
--#include "semaphore.h"
--#include "mutex.h"
--
--void
--SemaphoreInit(
--	OUT     PSEMAPHORE      Semaphore,
--	IN      DWORD           InitialValue
--)
--{
--	ASSERT(NULL != Semaphore);
--
--	memzero(Semaphore, sizeof(SEMAPHORE));
--
--	MutexInit(&Semaphore->SemaphoreMutex);
--
--	InitializeListHead(&Semaphore->WaitingList);
--
--	Semaphore->Value = InitialValue;
--}
--
--void
--SemaphoreDown(
--	INOUT   PSEMAPHORE      Semaphore,
--	IN      DWORD           Value
--)
--{
--	INTR_STATE dummyState;
--	MutexAcquire(&Semaphore->SemaphoreMutex);
--	if (Semaphore->Value > Value) {
--		Semaphore->Value -= Value;
--	}
--	else {
--		PTHREAD pCurrentThread = GetCurrentThread();
--		InsertTailList(&Semaphore->WaitingList, &pCurrentThread->ReadyList);
--		MutexRelease(&Semaphore->SemaphoreMutex);
--		ThreadBlock();
--		MutexAcquire(&Semaphore->SemaphoreMutex);		
--	}
--	MutexRelease(&Semaphore->SemaphoreMutex	);
--}
--
--void
--SemaphoreUp(
--	INOUT   PSEMAPHORE      Semaphore,
--	IN      DWORD           Value
--)
--{
--	
--}
 \ No newline at end of file
 diff --git a/src/HAL9000/src/system.c b/src/HAL9000/src/system.c
 index d846a58..b0b436e 100644
