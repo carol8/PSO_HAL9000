@@ -1,0 +1,135 @@
+diff --git a/exercitii.txt b/exercitii.txt
+deleted file mode 100644
+index 2bcbd29..0000000
+--- a/exercitii.txt
++++ /dev/null
+@@ -1,11 +0,0 @@
+-1. a. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de intrare (tastatura)
+-   b. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de iesire (ecranul)
+-   c. Acest thread e CPU bound pentru ca proceseaza date, nu asteapta dupa dispozitive IO.
+-   d. Acest thread e IO bound pentru ca asteapta dupa un dispozitiv de intrare (HDD-ul)
+-2. Thread-urile IO bound, pentru ca vor avea prioritate mai mare (pentru a rula imediat dupa deblocarea
+-dispozitivului IO.
+-3. Thread-urile CPU bound, deoarece ele au nevoie de cat mai mult timp pentru a procesa datele.
+-4. TickCountCompleted reprezinta numarul de tick-uri de procesor rulate de fiecare thread. Variabila se
+-incrementeaza in ThreadTick().
+-   TickCountEarly reprezinta numarul de tick-uri de procesor care s-au terminat mai devreme decat cuanta
+-de timp alocata pentru acel thread (prin yield voluntar sau blocare)
+\ No newline at end of file
+diff --git a/postbuild/paths.cmd b/postbuild/paths.cmd
+index 1b49263..cec924b 100644
+--- a/postbuild/paths.cmd
++++ b/postbuild/paths.cmd
+@@ -12,7 +12,6 @@ set PATH_TO_VM_DISK=__EMPTY__
+ set PATH_TO_VM_TOOLS=__EMPTY__
+ set VOL_MOUNT_LETTER=__EMPTY__
+ 
+-if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
+ if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
+ if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
+ if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
+@@ -70,14 +69,4 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
+ 
+ goto end
+ 
+-:config_DESKTOP-NITRO5
+-
+-SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+-SET VOL_MOUNT_LETTER="Q:"
+-SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+-SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+-SET PATH_TO_VIX_TOOLS="F:\Programe\VMWare"
+-SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+-goto end
+-
+ :end
+\ No newline at end of file
+diff --git a/src/HAL9000/src/system.c b/src/HAL9000/src/system.c
+index 90e066f..b0b436e 100644
+--- a/src/HAL9000/src/system.c
++++ b/src/HAL9000/src/system.c
+@@ -21,7 +21,6 @@
+ #include "ex_system.h"
+ #include "process_internal.h"
+ #include "boot_module.h"
+-#include "rtc.h"
+ 
+ #define NO_OF_TSS_STACKS             7
+ STATIC_ASSERT(NO_OF_TSS_STACKS <= NO_OF_IST);
+@@ -33,12 +32,6 @@ typedef struct _SYSTEM_DATA
+ 
+ static SYSTEM_DATA m_systemData;
+ 
+-typedef struct _CPU_DATA 
+-{
+-    QWORD tickCount;
+-    BYTE callingCpuId;
+-} CPU_DATA, *PCPU_DATA;
+-
+ QWORD gVirtualToPhysicalOffset;
+ 
+ void
+@@ -66,45 +59,6 @@ SystemPreinit(
+     ProcessSystemPreinit();
+ }
+ 
+-static
+-STATUS
+-(__cdecl _PrintTick)(
+-	IN_OPT PVOID Context
+-	)
+-{
+-	PCPU_DATA pcpu_data = (PCPU_DATA)Context;
+-
+-	LOGP("%U\n", pcpu_data->tickCount);
+-
+-	return STATUS_SUCCESS;
+-}
+-
+-static
+-STATUS
+-(__cdecl _PrintTickAndIPI)(
+-	IN_OPT PVOID Context
+-	)
+-{
+-    STATUS status;
+-
+-    PCPU_DATA pcpu_data = (PCPU_DATA)Context;
+-
+-    LOGP("%U\n", pcpu_data->tickCount);
+-
+-	SMP_DESTINATION dest = { pcpu_data->callingCpuId };
+-	CPU_DATA cpu_data;
+-	cpu_data.tickCount = RtcGetTickCount();
+-	cpu_data.callingCpuId = CpuGetApicId();
+-	status = SmpSendGenericIpiEx(_PrintTick, (PVOID)&cpu_data, NULL, NULL, TRUE, SmpIpiSendToAllExcludingSelf, dest);
+-	if (!SUCCEEDED(status))
+-	{
+-		LOG_FUNC_ERROR("SmpSendGenericIpi", status);
+-		return status;
+-	}
+-
+-	return STATUS_SUCCESS;
+-}
+-
+ STATUS
+ SystemInit(
+     IN  ASM_PARAMETERS*     Parameters
+@@ -358,17 +312,6 @@ SystemInit(
+     }
+ 
+     LOGL("Network stack successfully initialized\n");
+-    
+-    SMP_DESTINATION dest = { 0 };
+-    CPU_DATA cpu_data;
+-    cpu_data.tickCount = RtcGetTickCount();
+-    cpu_data.callingCpuId = CpuGetApicId();
+-    status = SmpSendGenericIpiEx(_PrintTickAndIPI, (PVOID) &cpu_data, NULL, NULL, TRUE, SmpIpiSendToAllExcludingSelf, dest);
+-	if (!SUCCEEDED(status))
+-	{
+-		LOG_FUNC_ERROR("SmpSendGenericIpi", status);
+-		return status;
+-	}
+ 
+     return status;
+ }
