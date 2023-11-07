@@ -1,3 +1,4 @@
+Ia, Ib, Ic, Id, Ie, If, IIa, IIb succesful
 diff --git a/exercitii.txt b/exercitii.txt
 deleted file mode 100644
 index 2bcbd29..0000000
