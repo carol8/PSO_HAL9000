@@ -1,0 +1,384 @@
+diff --git a/postbuild/copy_um_apps_to_vm.cmd b/postbuild/copy_um_apps_to_vm.cmd
+index 1da1393..050add8 100644
+--- a/postbuild/copy_um_apps_to_vm.cmd
++++ b/postbuild/copy_um_apps_to_vm.cmd
+@@ -39,11 +39,6 @@ goto end
+ :fail
+ 
+ echo "Failed, not all paths are valid!"
+-
+-echo "Path to VMWARE mount is [%PATH_TO_VM_MOUNT%]"
+-echo "Path to UM apps is [%PATH_TO_BINARIES%]"
+-echo "Full path to destination is [%FULL_PATH_TO_DESTINATION%]"
+-
+ exit /b 1
+ 
+ :end
+diff --git a/postbuild/hmm.cmd b/postbuild/hmm.cmd
+deleted file mode 100644
+index 289c124..0000000
+--- a/postbuild/hmm.cmd
++++ /dev/null
+@@ -1,49 +0,0 @@
+-@echo off
+-
+-setlocal
+-
+-pushd %CD%
+-cd %~dp0%
+-
+-call paths.cmd
+-
+-if [%VOL_MOUNT_LETTER%]==[__EMPTY__] goto fail
+-if [%PATH_TO_VM_DISK%]==[__EMPTY__] goto fail
+-if [%PATH_TO_VM_TOOLS%]==[__EMPTY__] goto fail
+-
+-set VOL_MOUNT_LETTER=Q:
+-
+-rem                                                               | Without this here there is an error: 
+-rem                                                               |   "The filename, directory name, or volume label syntax is incorrect."
+-rem                                                               | There should probably be a nicer way to do things...
+-rem                                                               v 
+-set PATH_TO_VM_MOUNT=F:\Programe\VMWare\VMware Virtual Disk Development Kit\bin\vmware-mount.exe"
+-set PATH_TO_BINARIES=%1
+-set FULL_PATH_TO_DESTINATION=%VOL_MOUNT_LETTER%\%2
+-
+-echo "Path to VMWARE mount is [%PATH_TO_VM_MOUNT%]"
+-echo "Path to UM apps is [%PATH_TO_BINARIES%]"
+-echo "Full path to destination is [%FULL_PATH_TO_DESTINATION%]"
+-
+-rem Mount the drive:
+-echo %PATH_TO_VM_MOUNT% %VOL_MOUNT_LETTER% %PATH_TO_VM_DISK%
+-%PATH_TO_VM_MOUNT% %VOL_MOUNT_LETTER% %PATH_TO_VM_DISK%
+-
+-rem Copy the applications
+-xcopy /F /Y %PATH_TO_BINARIES%*.exe %FULL_PATH_TO_DESTINATION%
+-
+-rem Unmount the drive:
+-%PATH_TO_VM_MOUNT% /d %VOL_MOUNT_LETTER%
+-
+-goto end
+-
+-:fail
+-
+-echo "Failed, not all paths are valid!"
+-exit /b 1
+-
+-:end
+-
+-:: --- reload initial current directory ---
+-popd
+-exit /b %ERRORLEVEL%
+\ No newline at end of file
+diff --git a/postbuild/paths.cmd b/postbuild/paths.cmd
+index ce07e48..cec924b 100644
+--- a/postbuild/paths.cmd
++++ b/postbuild/paths.cmd
+@@ -12,7 +12,6 @@ set PATH_TO_VM_DISK=__EMPTY__
+ set PATH_TO_VM_TOOLS=__EMPTY__
+ set VOL_MOUNT_LETTER=__EMPTY__
+ 
+-if _%COMPUTERNAME%_==_DESKTOP-NITRO5_ goto config_DESKTOP-NITRO5
+ if _%COMPUTERNAME%_==_AGURZOU-DEV-PC_ goto config_AGURZOU-DEV
+ if _%COMPUTERNAME%_==_ALEX-PC_ goto config_ALEX-PC
+ if _%COMPUTERNAME%_==_AGURZOU-LPT_ goto config_AGURZOU-LPT
+@@ -70,15 +69,4 @@ set BOCHS_PATH="c:\Program Files (x86)\Bochs-2.6.8\"
+ 
+ goto end
+ 
+-:config_DESKTOP-NITRO5
+-
+-SET PXE_PATH="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\PXE"
+-SET PATH_TO_VM_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmx"
+-SET PATH_TO_VM_DISK="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.vmdk"
+-SET PATH_TO_VIX_TOOLS="C:\Program Files (x86)\VMware\VMware Workstation"
+-SET PATH_TO_LOG_FILE="D:\OneDrive - Technical University of Cluj-Napoca\UTCN\An IV\S1\_Cod_Proiecte_Teme\PSO\HAL9000\VM\HAL9000_VM\HAL9000.log"
+-SET VOL_MOUNT_LETTER="Q:"
+-SET PATH_TO_VM_TOOLS="C:\Program Files (x86)\VMware\VMware Virtual Disk Development Kit"
+-goto end
+-
+ :end
+\ No newline at end of file
+diff --git a/src/HAL9000/src/.idea/.gitignore b/src/HAL9000/src/.idea/.gitignore
+deleted file mode 100644
+index 13566b8..0000000
+--- a/src/HAL9000/src/.idea/.gitignore
++++ /dev/null
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+diff --git a/src/HAL9000/src/.idea/modules.xml b/src/HAL9000/src/.idea/modules.xml
+deleted file mode 100644
+index f669a0e..0000000
+--- a/src/HAL9000/src/.idea/modules.xml
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/src.iml" filepath="$PROJECT_DIR$/.idea/src.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+diff --git a/src/HAL9000/src/.idea/src.iml b/src/HAL9000/src/.idea/src.iml
+deleted file mode 100644
+index bc2cd87..0000000
+--- a/src/HAL9000/src/.idea/src.iml
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="CPP_MODULE" version="4">
+-  <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="inheritedJdk" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+diff --git a/src/HAL9000/src/.idea/vcs.xml b/src/HAL9000/src/.idea/vcs.xml
+deleted file mode 100644
+index c2365ab..0000000
+--- a/src/HAL9000/src/.idea/vcs.xml
++++ /dev/null
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$/../../.." vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+diff --git a/src/HAL9000/src/syscall.c b/src/HAL9000/src/syscall.c
+index 661f70a..1576f7f 100644
+--- a/src/HAL9000/src/syscall.c
++++ b/src/HAL9000/src/syscall.c
+@@ -7,8 +7,6 @@
+ #include "mmu.h"
+ #include "process_internal.h"
+ #include "dmp_cpu.h"
+-#include "process.h"
+-#include "io.h"
+ 
+ extern void SyscallEntry();
+ 
+@@ -70,9 +68,6 @@ SyscallHandler(
+             status = SyscallValidateInterface((SYSCALL_IF_VERSION)*pSyscallParameters);
+             break;
+         // STUDENT TODO: implement the rest of the syscalls
+-        case SyscallIdProcessGetNumberOfPages:
+-			status = SyscallProcessGetNumberOfPages((DWORD*)pSyscallParameters[0], (DWORD*)pSyscallParameters[1]);
+-			break;
+         default:
+             LOG_ERROR("Unimplemented syscall called from User-space!\n");
+             status = STATUS_UNSUPPORTED;
+@@ -173,37 +168,5 @@ SyscallValidateInterface(
+ 
+     return STATUS_SUCCESS;
+ }
+-// STUDENT TODO: implement the rest of the syscalls
+ 
+-STATUS
+-SyscallFileWrite(
+-    IN  UM_HANDLE                   FileHandle,
+-	IN_READS_BYTES(BytesToWrite)
+-	PVOID                       Buffer,
+-	IN  QWORD                       BytesToWrite,
+-	OUT QWORD* BytesWritten
+-)
+-{
+-    UNREFERENCED_PARAMETER(FileHandle);
+-    *BytesWritten = BytesToWrite;
+-    LOG("[%s]:[%s]\n", ProcessGetName(NULL), Buffer);
+-    return STATUS_SUCCESS;
+-}
+-
+-STATUS
+-SyscallProcessGetNumberOfPages(
+-    OUT     DWORD* PagesCommitted,
+-    OUT     DWORD* PagesReserved
+-)
+-{
+-    PPROCESS pProcess = GetCurrentProcess();
+-
+-    if (!MmuIsBufferValid(PagesCommitted, sizeof(PagesCommitted), PAGE_RIGHTS_WRITE, pProcess)) {
+-        return STATUS_INVALID_BUFFER;
+-    }
+-	if (!MmuIsBufferValid(PagesReserved, sizeof(PagesCommitted), PAGE_RIGHTS_WRITE, pProcess)) {
+-		return STATUS_INVALID_BUFFER;
+-	}
+-
+-    return ProcessGetNumberOfPages(PagesCommitted, PagesReserved);
+-}
+\ No newline at end of file
++// STUDENT TODO: implement the rest of the syscalls
+\ No newline at end of file
+diff --git a/src/HAL9000/src/system.c b/src/HAL9000/src/system.c
+index d3558f0..b0b436e 100644
+--- a/src/HAL9000/src/system.c
++++ b/src/HAL9000/src/system.c
+@@ -70,8 +70,8 @@ SystemInit(
+     status = STATUS_SUCCESS;
+     pCpu = NULL;
+ 
+-    LogSystemInit(LogLevelTrace,
+-                  LogComponentUserMode | LogComponentMmu,
++    LogSystemInit(LogLevelInfo,
++                  LogComponentInterrupt | LogComponentIo | LogComponentAcpi,
+                   TRUE
+                   );
+ 
+diff --git a/src/HAL9000/src/thread.c b/src/HAL9000/src/thread.c
+index 31ebb42..b311f0c 100644
+--- a/src/HAL9000/src/thread.c
++++ b/src/HAL9000/src/thread.c
+@@ -950,7 +950,7 @@ _ThreadSetupMainThreadUserStack(
+     ASSERT(ResultingStack != NULL);
+     ASSERT(Process != NULL);
+ 
+-    *ResultingStack = (PVOID)PtrDiff(InitialStack, SHADOW_STACK_SIZE + sizeof(PVOID));
++    *ResultingStack = InitialStack;
+ 
+     return STATUS_SUCCESS;
+ }
+diff --git a/src/HAL9000/src/vm_reservation_space.c b/src/HAL9000/src/vm_reservation_space.c
+index 10e5f37..88295c4 100644
+--- a/src/HAL9000/src/vm_reservation_space.c
++++ b/src/HAL9000/src/vm_reservation_space.c
+@@ -4,8 +4,6 @@
+ #include "bitmap.h"
+ #include "lock_common.h"
+ #include "io.h"
+-#include "process.h"
+-#include "process_internal.h"
+ 
+ typedef enum _VMM_RESERVATION_STATE
+ {
+@@ -1018,43 +1016,3 @@ VmReservationReturnRightsForAddress(
+ 
+     return bFullyCommited ? STATUS_SUCCESS : STATUS_MEMORY_IS_NOT_COMMITED;
+ }
+-
+-STATUS
+-ProcessGetNumberOfPages(
+-    IN PPROCESS pProcess,
+-    OUT DWORD* PagesCommited,
+-    OUT DWORD* PagesReserved
+-) {
+-    INTR_STATE dummyState;
+-
+-    STATUS status;
+-    PVMM_RESERVATION pCurrentReservation;
+-
+-    DWORD nrPagesCommited = 0;
+-    DWORD nrPagesReserved = 0;
+-
+-    status = STATUS_SUCCESS;
+-    PVMM_RESERVATION_SPACE ReservationSpace = pProcess->VaSpace;
+-    SpinlockAcquire(&ReservationSpace->ReservationLock, &dummyState);
+-    for (pCurrentReservation = &ReservationSpace->ReservationList[0];
+-        VmmReservationStateLast != pCurrentReservation->State &&
+-        (PVOID)pCurrentReservation < ReservationSpace->BitmapAddressStart;
+-        pCurrentReservation = pCurrentReservation + 1) {
+-        if (VmmReservationStateFree == pCurrentReservation->State)
+-        {
+-            continue;
+-        }
+-
+-        for (QWORD address = pCurrentReservation->StartVa; address <= (QWORD)pCurrentReservation->StartVa + pCurrentReservation->Size; address += PAGE_SIZE)
+-        {
+-            if (_VmIsVaCommited(pCurrentReservation, address)) {
+-                nrPagesCommited++;
+-            }
+-        }
+-        nrPagesReserved++;
+-    }
+-    SpinlockRelease(&ReservationSpace->ReservationLock, &dummyState);
+-
+-    *PagesReserved = nrPagesReserved;
+-    *PagesCommited = nrPagesCommited;
+-}
+diff --git a/src/HAL9000/src/vmm.c b/src/HAL9000/src/vmm.c
+index be2a813..a70a2cb 100644
+--- a/src/HAL9000/src/vmm.c
++++ b/src/HAL9000/src/vmm.c
+@@ -269,9 +269,7 @@ VmmMapMemoryInternal(
+     ctx.Uncacheable = Uncacheable;
+ 
+     cr3.Raw = (QWORD) PagingData->BasePhysicalAddress;
+-    if (!_VmIsKernelAddress(BaseAddress)) {
+-        LOG("Will map virtual address 0x%X to physical address 0x%X\n", BaseAddress, PhysicalAddress);
+-    }
++
+     _VmWalkPagingTables(cr3,
+                         BaseAddress,
+                         Size,
+@@ -403,9 +401,9 @@ VmmSetupPageTables(
+     PagingData->BasePhysicalAddress = BasePhysicalAddress;
+     PagingData->KernelSpace = KernelStructures;
+ 
+-    LOG("Will setup paging tables at physical address: 0x%X\n", PagingData->BasePhysicalAddress);
+-    LOG("BaseAddress: 0x%X\n", pBaseVirtualAddress);
+-    LOG("Size of paging tables: 0x%x\n", sizeReservedForPagingStructures);
++    LOG_TRACE_VMM("Will setup paging tables at physical address: 0x%X\n", PagingData->BasePhysicalAddress);
++    LOG_TRACE_VMM("BaseAddress: 0x%X\n", pBaseVirtualAddress);
++    LOG_TRACE_VMM("Size of paging tables: 0x%x\n", sizeReservedForPagingStructures);
+ 
+     // 1. We cannot zero the memory before mapping it (because it's not mapped)
+     // 2. We cannot zero it after it was mapped because we already have some entries
+diff --git a/src/Usermode/CopyUmAppsToVm/CopyUmAppsToVm.vcxproj b/src/Usermode/CopyUmAppsToVm/CopyUmAppsToVm.vcxproj
+index 2da5a8b..79461ca 100644
+--- a/src/Usermode/CopyUmAppsToVm/CopyUmAppsToVm.vcxproj
++++ b/src/Usermode/CopyUmAppsToVm/CopyUmAppsToVm.vcxproj
+@@ -55,7 +55,7 @@
+       <SDLCheck>true</SDLCheck>
+     </ClCompile>
+     <PostBuildEvent>
+-      <Command>..\..\..\postbuild\copy_um_apps_to_vm.cmd "$(SolutionDir)..\bin\$(PlatformName)\$(Configuration)\UserMode\" Applications</Command>
++      <Command>..\..\..\postbuild\copy_um_apps_to_vm.cmd $(SolutionDir)..\bin\$(PlatformName)\$(Configuration)\UserMode\ Applications</Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -65,7 +65,7 @@
+       <SDLCheck>true</SDLCheck>
+     </ClCompile>
+     <PostBuildEvent>
+-      <Command>..\..\..\postbuild\copy_um_apps_to_vm.cmd "$(SolutionDir)..\bin\$(PlatformName)\$(Configuration)\UserMode\" Applications</Command>
++      <Command>..\..\..\postbuild\copy_um_apps_to_vm.cmd $(SolutionDir)..\bin\$(PlatformName)\$(Configuration)\UserMode\ Applications</Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemGroup>
+diff --git a/src/shared/common/syscall_func.h b/src/shared/common/syscall_func.h
+index 90766ea..115c3a4 100644
+--- a/src/shared/common/syscall_func.h
++++ b/src/shared/common/syscall_func.h
+@@ -306,9 +306,3 @@ SyscallFileWrite(
+     IN  QWORD                       BytesToWrite,
+     OUT QWORD*                      BytesWritten
+     );
+-
+-STATUS
+-SyscallProcessGetNumberOfPages(
+-	OUT     DWORD* PagesCommitted,
+-	OUT     DWORD* PagesReserved
+-);
+diff --git a/src/shared/common/syscall_no.h b/src/shared/common/syscall_no.h
+index 1acfd27..1045523 100644
+--- a/src/shared/common/syscall_no.h
++++ b/src/shared/common/syscall_no.h
+@@ -28,7 +28,5 @@ typedef enum _SYSCALL_ID
+     SyscallIdFileRead,
+     SyscallIdFileWrite,
+ 
+-    SyscallIdProcessGetNumberOfPages,
+-
+-    SyscallIdReserved = SyscallIdProcessGetNumberOfPages + 1
++    SyscallIdReserved = SyscallIdFileWrite + 1
+ } SYSCALL_ID;
