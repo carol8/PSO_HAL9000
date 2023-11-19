@@ -39,6 +39,11 @@ goto end
 :fail
 
 echo "Failed, not all paths are valid!"
+
+echo "Path to VMWARE mount is [%PATH_TO_VM_MOUNT%]"
+echo "Path to UM apps is [%PATH_TO_BINARIES%]"
+echo "Full path to destination is [%FULL_PATH_TO_DESTINATION%]"
+
 exit /b 1
 
 :end

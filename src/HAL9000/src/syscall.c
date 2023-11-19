@@ -7,6 +7,8 @@
 #include "mmu.h"
 #include "process_internal.h"
 #include "dmp_cpu.h"
+#include "process.h"
+#include "io.h"
 
 extern void SyscallEntry();
 
@@ -68,6 +70,9 @@ SyscallHandler(
             status = SyscallValidateInterface((SYSCALL_IF_VERSION)*pSyscallParameters);
             break;
         // STUDENT TODO: implement the rest of the syscalls
+        case SyscallIdProcessGetNumberOfPages:
+			status = SyscallProcessGetNumberOfPages((DWORD*)pSyscallParameters[0], (DWORD*)pSyscallParameters[1]);
+			break;
         default:
             LOG_ERROR("Unimplemented syscall called from User-space!\n");
             status = STATUS_UNSUPPORTED;
@@ -168,5 +173,37 @@ SyscallValidateInterface(
 
     return STATUS_SUCCESS;
 }
-
 // STUDENT TODO: implement the rest of the syscalls
+
+STATUS
+SyscallFileWrite(
+    IN  UM_HANDLE                   FileHandle,
+	IN_READS_BYTES(BytesToWrite)
+	PVOID                       Buffer,
+	IN  QWORD                       BytesToWrite,
+	OUT QWORD* BytesWritten
+)
+{
+    UNREFERENCED_PARAMETER(FileHandle);
+    *BytesWritten = BytesToWrite;
+    LOG("[%s]:[%s]\n", ProcessGetName(NULL), Buffer);
+    return STATUS_SUCCESS;
+}
+
+STATUS
+SyscallProcessGetNumberOfPages(
+    OUT     DWORD* PagesCommitted,
+    OUT     DWORD* PagesReserved
+)
+{
+    PPROCESS pProcess = GetCurrentProcess();
+
+    if (!MmuIsBufferValid(PagesCommitted, sizeof(PagesCommitted), PAGE_RIGHTS_WRITE, pProcess)) {
+        return STATUS_INVALID_BUFFER;
+    }
+	if (!MmuIsBufferValid(PagesReserved, sizeof(PagesCommitted), PAGE_RIGHTS_WRITE, pProcess)) {
+		return STATUS_INVALID_BUFFER;
+	}
+
+    return ProcessGetNumberOfPages(PagesCommitted, PagesReserved);
+}

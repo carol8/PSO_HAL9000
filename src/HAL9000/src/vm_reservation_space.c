@@ -4,6 +4,8 @@
 #include "bitmap.h"
 #include "lock_common.h"
 #include "io.h"
+#include "process.h"
+#include "process_internal.h"
 
 typedef enum _VMM_RESERVATION_STATE
 {
@@ -1015,4 +1017,44 @@ VmReservationReturnRightsForAddress(
     }
 
     return bFullyCommited ? STATUS_SUCCESS : STATUS_MEMORY_IS_NOT_COMMITED;
+}
+
+STATUS
+ProcessGetNumberOfPages(
+    IN PPROCESS pProcess,
+    OUT DWORD* PagesCommited,
+    OUT DWORD* PagesReserved
+) {
+    INTR_STATE dummyState;
+
+    STATUS status;
+    PVMM_RESERVATION pCurrentReservation;
+
+    DWORD nrPagesCommited = 0;
+    DWORD nrPagesReserved = 0;
+
+    status = STATUS_SUCCESS;
+    PVMM_RESERVATION_SPACE ReservationSpace = pProcess->VaSpace;
+    SpinlockAcquire(&ReservationSpace->ReservationLock, &dummyState);
+    for (pCurrentReservation = &ReservationSpace->ReservationList[0];
+        VmmReservationStateLast != pCurrentReservation->State &&
+        (PVOID)pCurrentReservation < ReservationSpace->BitmapAddressStart;
+        pCurrentReservation = pCurrentReservation + 1) {
+        if (VmmReservationStateFree == pCurrentReservation->State)
+        {
+            continue;
+        }
+
+        for (QWORD address = pCurrentReservation->StartVa; address <= (QWORD)pCurrentReservation->StartVa + pCurrentReservation->Size; address += PAGE_SIZE)
+        {
+            if (_VmIsVaCommited(pCurrentReservation, address)) {
+                nrPagesCommited++;
+            }
+        }
+        nrPagesReserved++;
+    }
+    SpinlockRelease(&ReservationSpace->ReservationLock, &dummyState);
+
+    *PagesReserved = nrPagesReserved;
+    *PagesCommited = nrPagesCommited;
 }
