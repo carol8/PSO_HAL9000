@@ -1,3 +1,4 @@
+Exercitii facute: toate de la learning, problema 1
 diff --git a/postbuild/copy_um_apps_to_vm.cmd b/postbuild/copy_um_apps_to_vm.cmd
 index 1da1393..050add8 100644
 --- a/postbuild/copy_um_apps_to_vm.cmd
