@@ -1,0 +1,17 @@
+1. 
+- _ProcessInit incarca executabilul in memorie
+- cand cream un proces, cream si un thread, dar nu invers
+
+2. 
+- diferenta dintre 1 si 2/3 este ca 1 spawneaza un thread kernel mode
+- diferenta dintre 2 si 3 este ca la 2 trimitem manual parametrii pe stack, fiind primul thread din sistem,
+  spre deosebire de 3 la care deocamdata trimitem un stack gol
+
+3. 
+- 2 thread-uri dintr-un proces pot accesa aceeasi variabila globala deoarece in momentul accesarii ambele thread-uri
+  ruleaza in cadrul aceleiasi memorii a procesului (variabila globala are aceeasi adresa virtuala pentru ambele)
+- 2 thread-uri din procese diferite nu pot accesa aceeasi variabila globala deoarece acea variabila nu e mapata
+  pentru ambele procese (deci nici pentru ambele thread-uri)
+4.
+- la fel ca la 3 (pot, fiindca un UM_HANDLE e un QWORD)
+- la fel ca la 3 (nu pot, fiindca un UM_HANDLE e un QWORD)

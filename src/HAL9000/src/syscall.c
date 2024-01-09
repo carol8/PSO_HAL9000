@@ -7,6 +7,8 @@
 #include "mmu.h"
 #include "process_internal.h"
 #include "dmp_cpu.h"
+#include "thread.h"
+#include "vmm.h"
 
 extern void SyscallEntry();
 
@@ -68,6 +70,21 @@ SyscallHandler(
             status = SyscallValidateInterface((SYSCALL_IF_VERSION)*pSyscallParameters);
             break;
         // STUDENT TODO: implement the rest of the syscalls
+        case SyscallIdFileWrite:
+            status = SyscallFileWrite((UM_HANDLE) pSyscallParameters[0], (PVOID) pSyscallParameters[1], (QWORD) pSyscallParameters[2], (QWORD*) pSyscallParameters[3]);
+            break;
+        case SyscallIdProcessExit:
+            status = SyscallProcessExit((STATUS) pSyscallParameters[0]);
+            break;
+        case SyscallIdThreadCreate:
+            status = SyscallThreadCreate((PFUNC_ThreadStart) pSyscallParameters[0], (PVOID) pSyscallParameters[1], (UM_HANDLE*) pSyscallParameters[2]);
+            break;
+        case SyscallIdThreadExit:
+            status = SyscallThreadExit((STATUS) pSyscallParameters[0]);
+            break;
+        case SyscallIdVirtualAlloc:
+            status = SyscallVirtualAlloc((PVOID)pSyscallParameters[0], (QWORD)pSyscallParameters[1], (VMM_ALLOC_TYPE)pSyscallParameters[2], (PAGE_RIGHTS)pSyscallParameters[3], (UM_HANDLE)pSyscallParameters[4], (QWORD)pSyscallParameters[5], (PVOID*)pSyscallParameters[6]);
+            break;
         default:
             LOG_ERROR("Unimplemented syscall called from User-space!\n");
             status = STATUS_UNSUPPORTED;
@@ -170,3 +187,67 @@ SyscallValidateInterface(
 }
 
 // STUDENT TODO: implement the rest of the syscalls
+
+STATUS
+SyscallFileWrite(
+    IN  UM_HANDLE                   FileHandle,
+    IN_READS_BYTES(BytesToWrite)
+    PVOID                       Buffer,
+    IN  QWORD                       BytesToWrite,
+    OUT QWORD* BytesWritten
+) {
+    UNREFERENCED_PARAMETER(BytesToWrite);
+    UNREFERENCED_PARAMETER(FileHandle);
+
+    *BytesWritten = BytesToWrite;
+    
+    LOG("[%s]:[%s]\n", ProcessGetName(NULL), Buffer);
+
+    return STATUS_SUCCESS;
+}
+
+STATUS
+SyscallProcessExit(
+    IN      STATUS                  ExitStatus
+) 
+{
+    ProcessTerminate(GetCurrentProcess());
+    return ExitStatus;
+}
+
+STATUS
+SyscallThreadCreate(
+    IN      PFUNC_ThreadStart       StartFunction,
+    IN_OPT  PVOID                   Context,
+    OUT     UM_HANDLE* ThreadHandle
+)
+{
+    return ThreadCreate("User thread", ThreadPriorityDefault, StartFunction, Context, (PTHREAD*) ThreadHandle);
+}
+
+STATUS
+SyscallThreadExit(
+    IN      STATUS                  ExitStatus
+)
+{
+    ThreadExit(ExitStatus);
+    return STATUS_SUCCESS;
+}
+
+STATUS
+SyscallVirtualAlloc(
+    IN_OPT      PVOID                   BaseAddress,
+    IN          QWORD                   Size,
+    IN          VMM_ALLOC_TYPE          AllocType,
+    IN          PAGE_RIGHTS             PageRights,
+    IN_OPT      UM_HANDLE               FileHandle,
+    IN_OPT      QWORD                   Key,
+    OUT         PVOID* AllocatedAddress
+)
+{
+    UNREFERENCED_PARAMETER(Key);
+    UNREFERENCED_PARAMETER(FileHandle);
+    PPROCESS currentProcess = GetCurrentProcess();
+    *AllocatedAddress = VmmAllocRegionEx(BaseAddress, Size, AllocType, PageRights, FALSE, NULL, currentProcess->VaSpace, currentProcess->PagingData, NULL);
+    return STATUS_SUCCESS;
+}

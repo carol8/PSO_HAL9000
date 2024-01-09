@@ -65,6 +65,16 @@ typedef struct _VMM_RETRIEVE_PHYS_ACCESS_PAGE_WALK_CONTEXT
     BOOLEAN                         ClearDirty;
 } VMM_RETRIEVE_PHYS_ACCESS_PAGE_WALK_CONTEXT, *PVMM_RETRIEVE_PHYS_ACCESS_PAGE_WALK_CONTEXT;
 
+typedef struct _FRAME_MAPPING
+{
+	PHYSICAL_ADDRESS    PhysicalAddress;
+	PVOID               VirtualAddress;
+
+	QWORD               AccessCount;
+
+	LIST_ENTRY          ListEntry;
+} FRAME_MAPPING, * PFRAME_MAPPING;
+
 static VMM_DATA m_vmmData;
 
 static
@@ -609,6 +619,11 @@ VmmAllocRegionEx(
                                      PagingData
                 );
 
+				if (PagingData != NULL && !PagingData->Data.KernelSpace)
+				{
+					_VmmAddFrameMappings(pa, pBaseAddress, noOfFrames);
+				}
+
                 // Check if the mapping is backed up by a file
                 if (FileObject != NULL)
                 {
@@ -813,6 +828,11 @@ VmmSolvePageFault(
                                  uncacheable,
                                  PagingData
                                  );
+
+			if (!PagingData->Data.KernelSpace)
+			{
+				_VmmAddFrameMappings(pa, alignedAddress, 1);
+			}
 
             // 3. If the virtual address is backed by a file read its contents
             if (pBackingFile != NULL)
@@ -1370,4 +1390,40 @@ BOOLEAN
     }
 
     return bContinue;
+}
+
+static
+void
+_VmmAddFrameMappings(
+	IN          PHYSICAL_ADDRESS    PhysicalAddress,
+	IN          PVOID               VirtualAddress,
+	IN          DWORD               FrameCount
+)
+{
+	PPROCESS pProcess;
+	PFRAME_MAPPING pMapping;
+	INTR_STATE intrState;
+
+	pProcess = GetCurrentProcess();
+
+	if (ProcessIsSystem(pProcess))
+	{
+		return;
+	}
+
+	for (DWORD i = 0; i < FrameCount; ++i)
+	{
+		pMapping = ExAllocatePoolWithTag(PoolAllocatePanicIfFail, sizeof(FRAME_MAPPING), HEAP_MMU_TAG, 0);
+
+		pMapping->PhysicalAddress = PtrOffset(PhysicalAddress, i * PAGE_SIZE);
+		pMapping->VirtualAddress = PtrOffset(VirtualAddress, i * PAGE_SIZE);
+		pMapping->AccessCount = 1;
+
+		LockAcquire(&pProcess->FrameMapLock, &intrState);
+		InsertTailList(&pProcess->FrameMappingsHead, &pMapping->ListEntry);
+		LockRelease(&pProcess->FrameMapLock, intrState);
+
+		LOG("Allocated entry from 0x%X -> 0x%X\n",
+			pMapping->VirtualAddress, pMapping->PhysicalAddress);
+	}
 }
